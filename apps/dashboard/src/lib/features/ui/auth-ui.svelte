@@ -99,27 +99,28 @@
       <div class="absolute inset-0 bg-black/45" aria-hidden="true"></div>
     </div>
   {:else}
-    <DotPattern fillColor="rgb(2 51 189 / 0.25)" class="absolute inset-0 z-0 h-full w-full" />
+    <div class="absolute inset-0 z-0 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900"></div>
+    <div class="absolute inset-0 z-0 opacity-20" style="background-image: radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.2) 0%, transparent 50%);"></div>
   {/if}
-  <Card.Root class="ui:w-full relative z-10 max-w-[400px] shadow-sm">
+  <Card.Root class="ui:w-full relative z-10 max-w-[420px] border-0 shadow-2xl backdrop-blur-sm">
     {#if !showOnlyContent || showLogo}
-      <Card.Header class="ui:flex ui:flex-col ui:items-center ui:gap-4">
-        <Avatar.Root>
-          <Avatar.Image
+      <Card.Header class="ui:flex ui:flex-col ui:items-center ui:gap-4 ui:pb-2">
+        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
+          <img
             src={$currentOrg.avatarUrl ? $currentOrg.avatarUrl : '/logo-192.png'}
             alt={$currentOrg.name ? $currentOrg.name : 'GurukulX'}
+            class="h-8 w-8 rounded-lg"
           />
-          <Avatar.Fallback>{$currentOrg.name ? $currentOrg.name : 'GurukulX'}</Avatar.Fallback>
-        </Avatar.Root>
+        </div>
 
         {#if !showOnlyContent}
           <a href="/">
-            <Card.Title class="ui:text-2xl font-normal!">
+            <Card.Title class="ui:text-2xl font-semibold!">
               {isLogin ? $t('login.welcome') : $t('login.create_account')}
             </Card.Title>
           </a>
           {#if isLogin}
-            <Card.Description class="ui:text-center">Sign in to continue</Card.Description>
+            <Card.Description class="ui:text-center">Sign in to your learning platform</Card.Description>
           {/if}
         {/if}
       </Card.Header>

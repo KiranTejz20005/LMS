@@ -26,11 +26,11 @@
           rel="noopener noreferrer"
           {...props}
         >
-          <Avatar.Root class="ui:flex ui:size-6 ui:items-center ui:justify-center">
-            <Avatar.Image src="/logo-192.png" alt="GurukulX logo" />
-          </Avatar.Root>
+          <div class="flex size-6 items-center justify-center rounded-md bg-gradient-to-br from-indigo-500 to-purple-600">
+            <img src="/logo-192.png" alt="GurukulX logo" class="h-4 w-4" />
+          </div>
 
-          <span class="truncate font-normal">GurukulX</span>
+          <span class="truncate font-semibold">GurukulX</span>
           <Badge variant="outline" class="capitalize">
             {PLAN_NAMES[plan] || plan}
           </Badge>

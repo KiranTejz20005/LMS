@@ -52,13 +52,15 @@
 </script>
 
 {#if $profile.id}
-  <div class="flex min-h-screen w-full justify-center dark:bg-neutral-900">
+  <div class="flex min-h-screen w-full justify-center bg-gradient-to-br from-slate-50 to-indigo-50 dark:from-neutral-950 dark:to-indigo-950/20">
     <div class="flex w-9/12 max-w-md flex-col items-center justify-center">
       <!-- Header With Logo -->
       <div class="flex flex-col items-center">
         <div class="mb-4 flex w-full items-center justify-center">
-          <img src="/logo-192.png" alt="GurukulX logo" height="50" width="50" data-atf="1" />
-          <h4 class="text-xl dark:text-white">GurukulX</h4>
+          <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
+            <img src="/logo-192.png" alt="GurukulX logo" height="28" width="28" data-atf="1" class="rounded-md" />
+          </div>
+          <h4 class="ml-3 text-xl font-semibold dark:text-white">GurukulX</h4>
         </div>
 
         <!-- Loggedin Email -->

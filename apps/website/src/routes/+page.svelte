@@ -72,11 +72,11 @@
 
 <!-- Hero Section -->
 <section class="relative overflow-hidden px-6 pt-32 pb-20 lg:px-12 lg:pt-44 lg:pb-32">
-  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,#f8faff_0%,#eef4ff_50%,#e8f0fe_100%)]"></div>
+  <div class="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,#f8f7ff_0%,#eee8ff_50%,#e8e0fe_100%)]"></div>
 
   <!-- Animated gradient orbs -->
-  <div class="pointer-events-none absolute top-20 -left-32 h-[500px] w-[500px] rounded-full bg-blue-200/30 blur-[100px] animate-pulse"></div>
-  <div class="pointer-events-none absolute -right-32 bottom-20 h-[400px] w-[400px] rounded-full bg-indigo-200/20 blur-[80px] animate-pulse" style="animation-delay: 1s;"></div>
+  <div class="pointer-events-none absolute top-20 -left-32 h-[500px] w-[500px] rounded-full bg-violet-200/30 blur-[100px] animate-pulse"></div>
+  <div class="pointer-events-none absolute -right-32 bottom-20 h-[400px] w-[400px] rounded-full bg-purple-200/20 blur-[80px] animate-pulse" style="animation-delay: 1s;"></div>
 
   <div class="relative z-10 mx-auto flex max-w-[1100px] flex-col items-center text-center">
     <!-- Badge -->
@@ -88,8 +88,8 @@
     <h1 class="max-w-[900px] text-[clamp(2.2rem,5vw,3.75rem)] leading-[1.08] font-bold tracking-tight text-gray-950">
       The Learning Platform That
       <span class="relative inline-block">
-        <span class="relative z-10 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">Actually Works</span>
-        <span class="absolute bottom-1 left-0 z-0 h-3 w-full bg-blue-100/60 rounded-sm"></span>
+        <span class="relative z-10 bg-gradient-to-r from-violet-600 to-purple-600 bg-clip-text text-transparent">Actually Works</span>
+        <span class="absolute bottom-1 left-0 z-0 h-3 w-full bg-violet-100/60 rounded-sm"></span>
       </span>
     </h1>
 
@@ -116,7 +116,7 @@
     <div class="mt-14 grid w-full max-w-[700px] grid-cols-2 gap-6 md:grid-cols-4">
       {#each stats as stat}
         <div class="flex flex-col items-center">
-          <span class="text-2xl font-bold text-blue-700 lg:text-3xl">{stat.value}</span>
+          <span class="text-2xl font-bold text-violet-700 lg:text-3xl">{stat.value}</span>
           <span class="mt-1 text-xs text-gray-500 lg:text-sm">{stat.label}</span>
         </div>
       {/each}
@@ -125,7 +125,7 @@
 
   <!-- Hero image -->
   <div class="relative z-10 mx-auto mt-16 w-full max-w-[1100px]">
-    <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-blue-900/5">
+    <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl shadow-violet-900/5">
       <img
         src="/hero-academy.jpeg"
         alt="GurukulX LMS Dashboard — courses, students, analytics"
@@ -156,10 +156,10 @@
       <div class="flex flex-col gap-2">
         {#each features as feature, i}
           <button
-            class="group flex items-start gap-4 rounded-xl border px-5 py-4 text-left transition-all duration-300 {activeFeature === i ? 'border-blue-200 bg-blue-50 shadow-sm' : 'border-transparent hover:border-gray-200 hover:bg-gray-50'}"
+            class="group flex items-start gap-4 rounded-xl border px-5 py-4 text-left transition-all duration-300 {activeFeature === i ? 'border-violet-200 bg-violet-50 shadow-sm' : 'border-transparent hover:border-gray-200 hover:bg-gray-50'}"
             onclick={() => activeFeature = i}
           >
-            <div class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg {activeFeature === i ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'}">
+            <div class="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-lg {activeFeature === i ? 'bg-violet-600 text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'}">
               <svelte:component this={feature.icon} size={20} />
             </div>
             <div>
@@ -201,8 +201,8 @@
 
     <div class="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {#each capabilities as cap}
-        <div class="group rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-blue-200 hover:shadow-lg hover:shadow-blue-900/5">
-          <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
+        <div class="group rounded-xl border border-gray-200 bg-white p-6 transition-all duration-300 hover:border-violet-200 hover:shadow-lg hover:shadow-violet-900/5">
+          <div class="flex h-11 w-11 items-center justify-center rounded-lg bg-violet-50 text-violet-600 transition-colors group-hover:bg-violet-600 group-hover:text-white">
             <svelte:component this={cap.icon} size={22} />
           </div>
           <h3 class="mt-4 font-semibold text-gray-900">{cap.title}</h3>
@@ -220,7 +220,7 @@
   <div class="relative z-10 mx-auto max-w-[1100px]">
     <div class="grid items-center gap-12 lg:grid-cols-2">
       <div>
-        <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-3 py-1 text-sm text-blue-300">
+        <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-500/30 bg-violet-500/10 px-3 py-1 text-sm text-violet-300">
           <BrainCircuitIcon size={14} />
           Powered by AI
         </div>
@@ -233,8 +233,8 @@
         <ul class="mt-8 space-y-3">
           {#each ['Generates courses from topics or documents', 'Answers student questions 24/7', 'Creates quizzes and assessments automatically', 'Adapts to each learner\'s pace'] as item}
             <li class="flex items-center gap-3 text-gray-300">
-              <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-500/20">
-                <CheckIcon size={14} class="text-blue-400" />
+              <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-500/20">
+                <CheckIcon size={14} class="text-violet-400" />
               </div>
               {item}
             </li>
@@ -242,7 +242,7 @@
         </ul>
         <div class="mt-8">
           <a href="/signup">
-            <Button class="h-11 bg-blue-600 px-6 hover:bg-blue-700">
+            <Button class="h-11 bg-violet-600 px-6 hover:bg-violet-700">
               Try AI Course Builder
               <ArrowRightIcon size={16} class="ml-2" />
             </Button>
@@ -300,19 +300,19 @@
 </section>
 
 <!-- CTA Section -->
-<section class="relative overflow-hidden bg-gradient-to-r from-blue-600 to-indigo-700 px-6 py-20 lg:px-12 lg:py-24">
+<section class="relative overflow-hidden bg-gradient-to-r from-violet-600 to-purple-700 px-6 py-20 lg:px-12 lg:py-24">
   <div class="pointer-events-none absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA2MCAwIEwgMCAwIDAgNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSgyNTUsMjU1LDI1NSwwLjA4KSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-50"></div>
 
   <div class="relative z-10 mx-auto flex max-w-[700px] flex-col items-center text-center">
     <h2 class="text-3xl font-bold tracking-tight text-white lg:text-4xl">
       Ready to Launch Your Academy?
     </h2>
-    <p class="mt-4 max-w-[500px] text-base text-blue-100 lg:text-lg">
+    <p class="mt-4 max-w-[500px] text-base text-violet-100 lg:text-lg">
       Start building courses, enrolling students, and issuing certificates today. No credit card required.
     </p>
     <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
       <a href="/signup">
-        <Button class="h-12 bg-white px-7 text-base text-blue-700 hover:bg-gray-100">
+        <Button class="h-12 bg-white px-7 text-base text-violet-700 hover:bg-gray-100">
           Start Building for Free
           <RocketIcon size={16} class="ml-2" />
         </Button>

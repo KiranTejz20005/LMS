@@ -154,7 +154,7 @@ class AppInitApi extends BaseApi {
 
     const theme = get(currentOrg)?.theme;
 
-    setTheme(theme || 'blue');
+    setTheme(theme || 'violet');
   }
 
   routeUserToNextPage({ isOrgSite }: AppSetupParams) {

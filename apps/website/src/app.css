@@ -145,5 +145,5 @@ svg.lucide-icon:not(.custom) {
 }
 
 body {
-  --primary: var(--color-blue-700);
+  --primary: var(--color-violet-600);
 }

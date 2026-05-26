@@ -45,7 +45,7 @@
       $globalStore.orgSiteName = data.orgSiteName || '';
       $globalStore.isOrgSite = true;
       currentOrg.set(mergeAccountOrgFromServer(data.org));
-      setTheme(data.org.theme || 'blue');
+      setTheme(data.org.theme || 'violet');
     }
   });
 
