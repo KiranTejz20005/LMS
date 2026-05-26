@@ -1,0 +1,40 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "globalEnv": ["PUBLIC_IS_SELFHOSTED"],
+  "pipeline": {
+    "@cio/dashboard#build": {
+      "dependsOn": ["@cio/api#build", "@cio/ui#build", "@cio/db#build", "@cio/analytics#build"],
+      "cache": false
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", ".svelte-kit/**", ".vercel/**", "dist/**", "build/**"]
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"]
+    },
+    "format": { "cache": true },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "dashboard:dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "storybook:dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "prepare": {
+      "dependsOn": ["^build"],
+      "persistent": true
+    },
+    "clean": { "cache": false },
+    "db": { "cache": false }
+  }
+}

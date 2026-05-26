@@ -1,0 +1,192 @@
+<script lang="ts">
+  import { preventDefault } from '$lib/utils/functions/svelte';
+
+  import { onMount } from 'svelte';
+  import * as UnderlineTabs from '@cio/ui/custom/underline-tabs';
+  import { snackbar } from '$features/ui/snackbar/store';
+  import * as Dialog from '@cio/ui/base/dialog';
+  import { handleOpenWidget } from '$features/ui/course-landing-page/store';
+  import { queryUnsplash } from './utils';
+
+  import { t } from '$lib/utils/functions/translations';
+  import { uploadImage } from '$lib/utils/services/upload';
+  import * as FileDropZone from '@cio/ui/custom/file-drop-zone';
+  import type { FileRejectedReason } from '@cio/ui/custom/file-drop-zone';
+  import { InputField } from '@cio/ui/custom/input-field';
+  import { Button } from '@cio/ui/base/button';
+
+  interface Props {
+    imageURL?: string;
+    onchange?: (_v: string) => void;
+  }
+
+  let { imageURL = $bindable(''), onchange }: Props = $props();
+
+  const tabs = [
+    { label: 'Upload', value: 'upload' },
+    { label: 'Unsplash', value: 'unsplash' }
+  ];
+
+  let isUploading = $state(false);
+  let isSearching = $state(false);
+  let currentTab = $state(tabs[0].value);
+  let searchQuery = $state('');
+  let unsplashImages: {
+    id: string | number;
+    user: {
+      name: string;
+      username: string;
+    };
+    urls: {
+      regular: string;
+    };
+    alt_description: string;
+  }[] = $state([]);
+
+  const MAX_IMAGE_SIZE = 500 * FileDropZone.KILOBYTE;
+
+  async function handleImageClick(img: string) {
+    $handleOpenWidget.open = false;
+
+    onchange?.(img);
+    imageURL = img;
+  }
+
+  async function handleFilesUpload(files: File[]) {
+    const file = files[0];
+    if (file) await handleUploadImage(file);
+  }
+
+  function handleFileRejected({ reason }: { reason: FileRejectedReason }) {
+    if (reason === 'Maximum file size exceeded') {
+      snackbar.error('snackbar.landing_page_settings.error.file_size');
+    } else {
+      snackbar.error('snackbar.landing_page_settings.error.file_size');
+    }
+  }
+
+  const handleUploadImage = async (image: File) => {
+    isUploading = true;
+    if (!image) {
+      return;
+    }
+
+    imageURL = await uploadImage(image);
+
+    onchange?.(imageURL);
+    isUploading = false;
+
+    snackbar.success(`snackbar.landing_page_settings.success.complete`);
+    $handleOpenWidget.open = false;
+  };
+
+  async function handleSubmit() {
+    isSearching = true;
+
+    try {
+      unsplashImages = await queryUnsplash(searchQuery || 'rocks');
+    } catch (error) {
+      snackbar.error('snackbar.landing_page_settings.error.fetch_error');
+      console.error('Error fetching images from Unsplash:', error);
+    } finally {
+      isSearching = false;
+    }
+  }
+
+  onMount(handleSubmit);
+</script>
+
+<Dialog.Root
+  bind:open={$handleOpenWidget.open}
+  onOpenChange={(isOpen) => {
+    if (!isOpen) $handleOpenWidget.open = false;
+  }}
+>
+  <Dialog.Content class="ui:z-300! w-3/5">
+    <Dialog.Header>
+      <Dialog.Title>{$t('course.navItem.landing_page.upload_widget.title')}</Dialog.Title>
+    </Dialog.Header>
+    <div class="w-full bg-white p-2 dark:bg-inherit">
+      <UnderlineTabs.Root bind:value={currentTab}>
+        <UnderlineTabs.List>
+          {#each tabs as tab}
+            <UnderlineTabs.Trigger value={tab.value}>
+              {tab.label}
+            </UnderlineTabs.Trigger>
+          {/each}
+        </UnderlineTabs.List>
+        <UnderlineTabs.Content value="upload">
+          <div class="w-full {isUploading ? 'ui:opacity-50 ui:pointer-events-none' : ''}">
+            <FileDropZone.Root
+              accept={FileDropZone.ACCEPT_IMAGE}
+              maxFiles={1}
+              fileCount={0}
+              maxFileSize={MAX_IMAGE_SIZE}
+              onUpload={handleFilesUpload}
+              onFileRejected={handleFileRejected}
+            >
+              <FileDropZone.Trigger
+                label={$t('course.navItem.landing_page.upload_widget.drag_drop')}
+                formatMaxSize={(_size) => $t('course.navItem.landing_page.upload_widget.size')}
+              />
+            </FileDropZone.Root>
+          </div>
+        </UnderlineTabs.Content>
+        <UnderlineTabs.Content value="unsplash">
+          <!-- Your Images content here -->
+          <div class="h-full overflow-y-scroll">
+            <form onsubmit={preventDefault(handleSubmit)} class="mt-1 flex gap-2 pb-3">
+              <InputField className="ml-2 w-[85%]" bind:value={searchQuery} />
+              <Button type="submit" variant="outline" loading={isSearching}>
+                {$t('course.navItem.landing_page.upload_widget.submit')}
+              </Button>
+            </form>
+            {#if unsplashImages && unsplashImages.length > 0}
+              <div class="hide-scrollbar flex max-h-[300px] flex-row flex-wrap items-center gap-2 px-[10px]">
+                {#each unsplashImages as unsplashImages (unsplashImages.id)}
+                  <div>
+                    <div class="relative h-[130px] w-[195px] overflow-hidden">
+                      <button onclick={() => handleImageClick(unsplashImages.urls.regular)}>
+                        <img
+                          src={unsplashImages.urls.regular}
+                          alt={unsplashImages.alt_description}
+                          class="h-full w-full cursor-pointer rounded-md object-cover hover:opacity-80"
+                        />
+                      </button>
+                    </div>
+                    {#if unsplashImages.user.name}
+                      <p class="mt-1 text-center text-xs font-light text-gray-500">
+                        By <a
+                          href={`https://unsplash.com/@${unsplashImages.user.username}`}
+                          target="_blank"
+                          class="hover:text-red-700">{unsplashImages.user.name}</a
+                        >
+                      </p>
+                    {/if}
+                  </div>
+                {/each}
+              </div>
+            {:else}
+              <p class="pt-7 text-center">
+                {$t('course.navItem.landing_page.upload_widget.no_images')}
+              </p>
+            {/if}
+          </div>
+        </UnderlineTabs.Content>
+      </UnderlineTabs.Root>
+    </div>
+  </Dialog.Content>
+</Dialog.Root>
+
+<style>
+  .hide-scrollbar {
+    width: 100%;
+    overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+</style>

@@ -1,0 +1,115 @@
+<script lang="ts">
+  import { Separator } from '@cio/ui/base/separator';
+  import * as Sidebar from '@cio/ui/base/sidebar';
+  import BellIcon from '@lucide/svelte/icons/bell';
+  import { Button } from '@cio/ui/base/button';
+  import { IconButton } from '@cio/ui/custom/icon-button';
+  import * as Popover from '@cio/ui/base/popover';
+  import { HoverableItem, PreviewIcon } from '@cio/ui/custom/moving-icons';
+  import RefreshCcwIcon from '@lucide/svelte/icons/refresh-ccw';
+  import * as Empty from '@cio/ui/base/empty';
+  import { page } from '$app/state';
+  import { currentOrg, currentOrgDomain } from '$lib/utils/store/org';
+  import { isStudentExperience } from '$lib/utils/store/app';
+  import SparklesIcon from '@lucide/svelte/icons/sparkles';
+  import { setupProgressApi } from '$features/setup/api/setup-progress.svelte';
+  import { courseApi } from '$features/course/api';
+  import { openCoursePreview } from '$features/course/utils/course-preview';
+  import { getActiveCourseNavKey } from '$features/course/utils/functions';
+  import { toggleAiAssistant } from '$features/ai-assistant/utils/store';
+  import { t } from '$lib/utils/functions/translations';
+  import CoursePublishBadge from './course-publish-badge.svelte';
+  import CoursePublicBadge from './course-public-badge.svelte';
+
+  const siteName = $derived($currentOrg.siteName);
+  const showCoursePublishBadge = $derived(!$isStudentExperience);
+  const isPublicCourse = $derived(courseApi.course?.type === 'PUBLIC');
+  const activeNavKey = $derived(getActiveCourseNavKey(page.url.pathname, courseApi.course?.id ?? ''));
+
+  $effect(() => {
+    if (!siteName) return;
+
+    setupProgressApi.fetchSetupProgress(siteName);
+  });
+
+  function handlePreview() {
+    openCoursePreview({
+      courseId: courseApi.course?.id ?? '',
+      courseSlug: courseApi.course?.slug,
+      currentOrgDomain: $currentOrgDomain
+    });
+  }
+</script>
+
+<header
+  class="border-border ui:bg-background sticky top-0 z-100 flex h-12 w-full shrink-0 items-center gap-2 border-b backdrop-blur transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-8"
+>
+  <div class="flex w-full items-center gap-2 px-4">
+    <Sidebar.Trigger />
+
+    <div class="h-4 w-2">
+      <Separator orientation="vertical" />
+    </div>
+
+    <div class="flex w-[60%] min-w-0 flex-1 flex-col justify-center gap-0.5">
+      <div class="flex min-w-0 items-center gap-2">
+        <p class="max-w-xs truncate text-sm font-medium">
+          {activeNavKey ? $t(activeNavKey) : ''}
+        </p>
+
+        {#if isPublicCourse}
+          <CoursePublicBadge class="shrink-0" />
+        {/if}
+
+        {#if showCoursePublishBadge}
+          <CoursePublishBadge isPublished={courseApi.course?.isPublished ?? false} />
+        {/if}
+      </div>
+    </div>
+
+    <span class="grow"></span>
+
+    <Button variant="outline" size="sm" onclick={toggleAiAssistant}>
+      <SparklesIcon size={14} />
+      {$t('course.navItems.nav_ai_assistant')}
+    </Button>
+
+    <Popover.Root>
+      <Popover.Trigger>
+        <Button variant="outline" size="icon">
+          <BellIcon class="custom rounded-full" />
+        </Button>
+      </Popover.Trigger>
+      <Popover.Content>
+        <Empty.Root class="ui:from-muted/50 ui:to-background ui:h-full ui:bg-gradient-to-b ui:from-30%">
+          <Empty.Header>
+            <Empty.Media variant="icon">
+              <BellIcon />
+            </Empty.Media>
+            <Empty.Title>No Notifications</Empty.Title>
+            <Empty.Description>You're all caught up. New notifications will appear here.</Empty.Description>
+          </Empty.Header>
+          <Empty.Content>
+            <Button variant="outline" size="sm">
+              <RefreshCcwIcon />
+              {$t('common.refresh')}
+            </Button>
+          </Empty.Content>
+        </Empty.Root>
+      </Popover.Content>
+    </Popover.Root>
+
+    <HoverableItem>
+      {#snippet children(isHovered)}
+        <IconButton
+          onclick={handlePreview}
+          disabled={!courseApi.course?.id}
+          tooltip={$t('course.header.preview')}
+          aria-label={$t('course.header.preview')}
+        >
+          <PreviewIcon {isHovered} size={16} />
+        </IconButton>
+      {/snippet}
+    </HoverableItem>
+  </div>
+</header>

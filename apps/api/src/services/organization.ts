@@ -1,0 +1,805 @@
+import { AppError, ErrorCodes } from '@api/utils/errors';
+import type { OrgAudienceMember, OrgAudiencePagination, OrgAudienceQuery } from '@api/types/org';
+import type { TGetAudienceQuery, TGetOrganizationCoursesQuery } from '@cio/utils/validation/organization';
+import type { TNewOrganizationPlan, TOrganization, TOrganizationPlan } from '@db/types';
+import {
+  cancelOrganizationPlan,
+  createOrganizationPlan,
+  deleteOrganizationAudienceMember,
+  deleteOrganizationMember,
+  getActiveOrganizationPlan,
+  getFirstOrganizationWithPlans,
+  getLatestOrgInvitesByEmails,
+  getOrgIdBySiteName,
+  getOrganizationAudience,
+  getOrganizationAudienceMember,
+  getOrganizationById,
+  getOrganizationBySiteName,
+  getOrganizationTeam,
+  getOrganizations,
+  revokeActiveOrganizationInvitesByEmails,
+  updateOrganization,
+  updateOrganizationPlan
+} from '@cio/db/queries/organization';
+import {
+  countPublishedCoursesBySiteName,
+  getCoursesById,
+  getCoursesBySiteNameForSetup,
+  getEnrolledCourses,
+  getExercisesBySiteName,
+  getExploreCourses,
+  getLessonsBySiteName,
+  getOrgCourses,
+  getPublishedCoursesBySiteName
+} from '@cio/db/queries/course';
+import { getCourseIdsByTagSlugs, getCourseTagsByCourseIdsForOrganization } from '@cio/db/queries/tag';
+import { getAccountPrimary } from '@cio/db/queries/account';
+import { getLastLogin, getProfileCourseProgress, getUserExercisesStats } from '@cio/db/queries/analytics';
+
+import type { OrganizationWithPlans } from '@cio/db/queries/organization/types';
+import { PLAN } from '@cio/utils/plans';
+import { ROLE } from '@cio/utils/constants';
+import { createOrganizationWithOwner } from '@api/services/onboarding';
+import { deriveAudienceMemberStatus } from '@api/utils/audience-member-status';
+import { getProfileById } from '@cio/db/queries/auth';
+import { inviteTeamMembers as inviteTeamMembersSecure } from './organization/invite';
+import { trustCustomDomainHostname, untrustCustomDomainHostname } from '@cio/db/utils';
+
+const PUBLIC_ORG_LANDING_PAGE_COURSE_LIMIT = 4;
+
+/**
+ * Creates a new organization with the current user as owner
+ * @param profileId - The profile ID of the user creating the organization
+ * @param data - Organization creation data (name, siteName)
+ * @returns Created organization, member, and updated organizations list
+ */
+export async function createOrg(profileId: string, data: { name: string; siteName: string }) {
+  try {
+    // Reuse existing function from onboarding service
+    return await createOrganizationWithOwner(profileId, {
+      orgName: data.name,
+      siteName: data.siteName
+    });
+  } catch (error) {
+    // Re-throw AppError as-is
+    if (error instanceof AppError) {
+      throw error;
+    }
+    // Wrap unexpected errors
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to create organization',
+      ErrorCodes.ORG_CREATE_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Gets organizations with optional filters
+ * @param filters - Filter options (siteName, customDomain, isCustomDomainVerified)
+ * @returns Array of organizations with plans
+ */
+export async function getOrganizationsWithFilters(filters?: {
+  siteName?: string;
+  customDomain?: string;
+  isCustomDomainVerified?: boolean;
+}): Promise<OrganizationWithPlans[]> {
+  try {
+    const organizations = await getOrganizations(filters);
+    return organizations;
+  } catch (error) {
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch organizations',
+      ErrorCodes.ORGANIZATION_NOT_FOUND,
+      500
+    );
+  }
+}
+
+/**
+ * Gets the first organization with plans - for self-hosted single-org mode
+ * @returns First organization or null
+ */
+export async function getFirstOrgForSelfHosted(): Promise<OrganizationWithPlans | null> {
+  try {
+    return await getFirstOrganizationWithPlans();
+  } catch (error) {
+    console.error('getFirstOrgForSelfHosted error:', error);
+    return null;
+  }
+}
+
+/**
+ * Gets organization team members (non-students)
+ * @param orgId - The organization ID
+ * @returns Array of team members
+ */
+export async function getOrgTeam(orgId: string) {
+  try {
+    const team = await getOrganizationTeam(orgId);
+    return team;
+  } catch (error) {
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch organization team',
+      ErrorCodes.ORG_TEAM_FETCH_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Gets organization audience (students)
+ * @param orgId - The organization ID
+ * @returns Audience members with invite status for profile-less rows
+ */
+export async function getOrgAudience(
+  orgId: string,
+  query: TGetAudienceQuery
+): Promise<{ items: OrgAudienceMember[]; pagination: OrgAudiencePagination; query: OrgAudienceQuery }> {
+  try {
+    const audienceResult = await getOrganizationAudience(orgId, query);
+    const audience = audienceResult.items;
+
+    const emailsWithoutProfile = audience.filter((m) => !m.profileId && m.email).map((m) => m.email.toLowerCase());
+
+    const invites = await getLatestOrgInvitesByEmails(orgId, emailsWithoutProfile);
+    const inviteByEmail = new Map(invites.map((i) => [i.email.toLowerCase(), i]));
+
+    return {
+      items: audience.map(
+        (member): OrgAudienceMember => ({
+          ...member,
+          status: deriveAudienceMemberStatus(
+            member.profileId,
+            member.email ? inviteByEmail.get(member.email.toLowerCase()) : undefined
+          )
+        })
+      ),
+      pagination: {
+        page: audienceResult.page,
+        limit: audienceResult.limit,
+        total: audienceResult.total,
+        totalPages: audienceResult.totalPages
+      },
+      query: {
+        page: audienceResult.page,
+        limit: audienceResult.limit,
+        search: query.search,
+        sortBy: query.sortBy,
+        sortOrder: query.sortOrder
+      }
+    };
+  } catch (error) {
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch organization audience',
+      ErrorCodes.ORG_AUDIENCE_FETCH_FAILED,
+      500
+    );
+  }
+}
+
+export async function getOrgAudienceMember(orgId: string, memberId: number): Promise<OrgAudienceMember> {
+  try {
+    const member = await getOrganizationAudienceMember(orgId, memberId);
+
+    if (!member) {
+      throw new AppError('Audience member not found', ErrorCodes.NOT_FOUND, 404);
+    }
+
+    if (!member.profileId && member.email) {
+      const invites = await getLatestOrgInvitesByEmails(orgId, [member.email.toLowerCase()]);
+      const invite = invites[0];
+
+      return {
+        ...member,
+        status: deriveAudienceMemberStatus(member.profileId, invite)
+      };
+    }
+
+    return {
+      ...member,
+      status: deriveAudienceMemberStatus(member.profileId, undefined)
+    };
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch audience member',
+      ErrorCodes.ORG_AUDIENCE_FETCH_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Removes a student audience member from an organization
+ * @param orgId - The organization ID
+ * @param memberId - The student member ID to remove
+ * @returns Deleted member
+ */
+export async function removeAudienceMember(orgId: string, memberId: number, removedByProfileId?: string) {
+  try {
+    const deleted = await deleteOrganizationAudienceMember(orgId, memberId);
+    if (!deleted) {
+      throw new AppError('Audience member not found', ErrorCodes.ORG_AUDIENCE_REMOVE_FAILED, 404);
+    }
+
+    if (deleted.email && removedByProfileId) {
+      await revokeActiveOrganizationInvitesByEmails(orgId, [deleted.email.toLowerCase()], removedByProfileId);
+    }
+
+    return deleted;
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to remove audience member',
+      ErrorCodes.ORG_AUDIENCE_REMOVE_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Gets public courses for an organization (landing page)
+ * @param siteName - The organization siteName
+ * @returns Array of published courses with lesson counts
+ */
+export async function getPublicCourses(siteName: string, tagSlugs?: string[]) {
+  try {
+    const orgResult = await getOrgIdBySiteName(siteName);
+    const org = orgResult[0];
+
+    if (!org) {
+      throw new AppError('Organization not found', ErrorCodes.ORG_NOT_FOUND, 404);
+    }
+
+    let filteredCourseIds: string[] | undefined = undefined;
+    if (tagSlugs && tagSlugs.length > 0) {
+      filteredCourseIds = await getCourseIdsByTagSlugs(org.id, tagSlugs);
+      if (filteredCourseIds.length === 0) {
+        return {
+          courses: [],
+          hasMoreCourses: false
+        };
+      }
+    }
+
+    const totalCourses = await countPublishedCoursesBySiteName(siteName, filteredCourseIds);
+    const courses = await getPublishedCoursesBySiteName(
+      siteName,
+      filteredCourseIds,
+      PUBLIC_ORG_LANDING_PAGE_COURSE_LIMIT
+    );
+    const tagsByCourseId = await getCourseTagsByCourseIdsForOrganization(
+      org.id,
+      courses.map((course) => course.id)
+    );
+
+    return {
+      courses: courses.map((course) => ({
+        ...course,
+        tags: tagsByCourseId[course.id] ?? []
+      })),
+      hasMoreCourses: totalCourses > courses.length
+    };
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch public courses',
+      ErrorCodes.COURSES_FETCH_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Gets organization courses with role-based data filtering
+ * @param orgId - The organization ID
+ * @param userId - User ID for role-based filtering (required)
+ * @param userRole - User's role in the organization (from context)
+ * @returns Object with role and courses array
+ * - Admins: all courses with totalStudents
+ * - Tutors: assigned courses with totalStudents
+ */
+export async function getOrganizationCourses(
+  orgId: string,
+  userId: string,
+  userRole: number,
+  query: TGetOrganizationCoursesQuery
+) {
+  try {
+    if (!userRole) {
+      throw new AppError('Invalid permissions', ErrorCodes.UNAUTHORIZED, 403);
+    }
+
+    const { page, limit, search } = query;
+    const tagSlugs = query.tags
+      ?.split(',')
+      .map((value) => value.trim())
+      .filter(Boolean);
+
+    let filteredCourseIds: string[] | undefined = undefined;
+    if (tagSlugs && tagSlugs.length > 0) {
+      filteredCourseIds = await getCourseIdsByTagSlugs(orgId, tagSlugs);
+      if (filteredCourseIds.length === 0) {
+        return {
+          items: [],
+          pagination: {
+            page,
+            limit,
+            total: 0,
+            totalPages: 0
+          },
+          query: {
+            page,
+            limit,
+            search,
+            tags: query.tags
+          }
+        };
+      }
+    }
+
+    switch (userRole) {
+      case ROLE.ADMIN: {
+        const courses = await getOrgCourses({
+          orgId,
+          courseIds: filteredCourseIds,
+          page,
+          limit,
+          search
+        });
+        const tagsByCourseId = await getCourseTagsByCourseIdsForOrganization(
+          orgId,
+          courses.items.map((course) => course.id)
+        );
+
+        return {
+          items: courses.items.map((course) => ({
+            ...course,
+            tags: tagsByCourseId[course.id] ?? []
+          })),
+          pagination: {
+            page: courses.page,
+            limit: courses.limit,
+            total: courses.total,
+            totalPages: courses.totalPages
+          },
+          query: {
+            page,
+            limit,
+            search,
+            tags: query.tags
+          }
+        };
+      }
+      case ROLE.TUTOR: {
+        const courses = await getOrgCourses({
+          orgId,
+          profileId: userId,
+          courseIds: filteredCourseIds,
+          page,
+          limit,
+          search
+        });
+        const tagsByCourseId = await getCourseTagsByCourseIdsForOrganization(
+          orgId,
+          courses.items.map((course) => course.id)
+        );
+
+        return {
+          items: courses.items.map((course) => ({
+            ...course,
+            tags: tagsByCourseId[course.id] ?? []
+          })),
+          pagination: {
+            page: courses.page,
+            limit: courses.limit,
+            total: courses.total,
+            totalPages: courses.totalPages
+          },
+          query: {
+            page,
+            limit,
+            search,
+            tags: query.tags
+          }
+        };
+      }
+      default:
+        throw new AppError('Invalid permissions', ErrorCodes.UNAUTHORIZED, 403);
+    }
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch courses',
+      ErrorCodes.COURSES_FETCH_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Gets user enrolled courses by organization orgId
+ *
+ * @param orgId - The organization ID
+ * @param userId - User ID for filtering
+ * @returns Array of enrolled courses
+ */
+export async function getUserEnrolledCourses(orgId: string, userId: string) {
+  try {
+    return getEnrolledCourses({ orgId, profileId: userId });
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch enrolled courses',
+      ErrorCodes.COURSES_FETCH_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Gets recommended courses (published courses user isn't enrolled in) for an organization
+ * Used in LMS explore page
+ *
+ * @param orgId - The organization ID
+ * @param userId - User ID to exclude enrolled courses
+ * @returns Array of recommended courses
+ */
+export async function getRecommendedCourses(orgId: string, userId: string) {
+  try {
+    return getExploreCourses({ orgId, profileId: userId });
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch recommended courses',
+      ErrorCodes.COURSES_FETCH_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Gets courses by organization orgId
+ * @param orgId - The organization orgId
+ * @returns Array of courses
+ */
+export async function getCoursesByOrgId(orgId: string) {
+  try {
+    return getCoursesById(orgId);
+  } catch (error) {
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch courses',
+      ErrorCodes.COURSES_FETCH_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Gets setup data for an organization
+ * @param siteName - The organization site name
+ * @returns Setup data including courses, lessons, exercises, and organization info
+ */
+export async function getOrgSetupData(siteName: string) {
+  try {
+    const [organization, courses, lessons, exercises] = await Promise.all([
+      getOrganizationBySiteName(siteName),
+      getCoursesBySiteNameForSetup(siteName),
+      getLessonsBySiteName(siteName),
+      getExercisesBySiteName(siteName)
+    ]);
+
+    // Check if course is published
+    const publishedCourse = courses.find((course) => course.isPublished === true);
+
+    // Get organization avatar URL directly from organization
+    const orgHasAvatarUrl = !!organization?.avatarUrl;
+
+    return {
+      isCoursePublished: !!publishedCourse,
+      isCourseCreated: courses.length > 0,
+      orgHasAvatarUrl,
+      courseData: courses,
+      lessonData: lessons,
+      isLessonCreated: lessons.length > 0,
+      isExerciseCreated: exercises.length > 0
+    };
+  } catch (error) {
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch setup data',
+      ErrorCodes.INTERNAL_ERROR,
+      500
+    );
+  }
+}
+
+/**
+ * Creates a new organization plan
+ * @param data - Organization plan creation data
+ * @returns Created organization plan
+ */
+export async function createOrgPlan(data: TNewOrganizationPlan) {
+  try {
+    // Subscriptions always attach to the primary workspace, even if a
+    // secondary org id was supplied at checkout.
+    const primary = data.orgId ? await getAccountPrimary(data.orgId) : null;
+    const targetOrgId = primary?.id ?? data.orgId;
+
+    const plan = await createOrganizationPlan({
+      orgId: targetOrgId,
+      planName: data.planName,
+      subscriptionId: data.subscriptionId,
+      triggeredBy: data.triggeredBy,
+      payload: data.payload,
+      isActive: true,
+      provider: 'polar'
+    });
+    return plan;
+  } catch (error) {
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to create organization plan',
+      ErrorCodes.ORG_PLAN_CREATE_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Updates an organization
+ * @param orgId - The organization ID
+ * @param data - Partial organization data to update
+ * @returns Updated organization
+ */
+export async function updateOrg(orgId: string, data: Partial<TOrganization>) {
+  try {
+    // Enforce plan restriction: only paid plans can use non-minimal landing page themes
+    if (data.landingpage && typeof data.landingpage === 'object') {
+      const landingpage = data.landingpage as Record<string, unknown>;
+      const theme = landingpage.theme;
+
+      if (typeof theme === 'string' && theme !== 'minimal') {
+        const activePlan = await getActiveOrganizationPlan(orgId);
+        const planName = activePlan?.planName ?? PLAN.BASIC;
+
+        if (planName === PLAN.BASIC) {
+          throw new AppError('Landing page themes require a paid plan', ErrorCodes.UPGRADE_REQUIRED, 403);
+        }
+      }
+    }
+
+    let previousCustomDomainHostname: string | undefined;
+
+    if (data.customDomain !== undefined || data.isCustomDomainVerified !== undefined) {
+      const previousOrg = await getOrganizationById(orgId);
+      const oldHost = previousOrg?.customDomain?.trim().toLowerCase();
+
+      if (oldHost) {
+        previousCustomDomainHostname = oldHost;
+      }
+    }
+
+    const organization = await updateOrganization(orgId, data);
+    if (!organization) {
+      throw new AppError('Organization not found', ErrorCodes.ORGANIZATION_NOT_FOUND, 404);
+    }
+
+    if (previousCustomDomainHostname) {
+      untrustCustomDomainHostname(previousCustomDomainHostname);
+    }
+
+    const newCustomDomainHostname = organization.customDomain?.trim().toLowerCase();
+
+    if (newCustomDomainHostname && organization.isCustomDomainVerified) {
+      trustCustomDomainHostname(newCustomDomainHostname);
+    }
+
+    return organization;
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to update organization',
+      ErrorCodes.INTERNAL_ERROR,
+      500
+    );
+  }
+}
+
+/**
+ * Updates an organization plan
+ * @param subscriptionId - Subscription ID
+ * @param payload - Payload data to update
+ * @returns Updated organization plan
+ */
+export async function updateOrgPlan(subscriptionId: string, payload: TOrganizationPlan['payload']) {
+  try {
+    const plan = await updateOrganizationPlan(subscriptionId, payload);
+    if (!plan) {
+      throw new AppError('Organization plan not found', ErrorCodes.ORG_PLAN_NOT_FOUND, 404);
+    }
+    return plan;
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to update organization plan',
+      ErrorCodes.ORG_PLAN_UPDATE_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Cancels an organization plan
+ * @param subscriptionId - Subscription ID
+ * @param payload - Payload data to update
+ * @returns Updated organization plan
+ */
+export async function cancelOrgPlan(subscriptionId: string, payload: TOrganizationPlan['payload']) {
+  try {
+    const plan = await cancelOrganizationPlan(subscriptionId, payload);
+    if (!plan) {
+      throw new AppError('Organization plan not found', ErrorCodes.ORG_PLAN_NOT_FOUND, 404);
+    }
+    return plan;
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to cancel organization plan',
+      ErrorCodes.ORG_PLAN_CANCEL_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Invites team members to an organization
+ * @param orgId - The organization ID
+ * @param emails - Array of email addresses to invite
+ * @param roleId - Role ID to assign (ADMIN or TUTOR)
+ * @returns Array of created members
+ */
+export async function inviteTeamMembers(orgId: string, emails: string[], roleId: number, invitedByProfileId?: string) {
+  if (!invitedByProfileId) {
+    throw new AppError('Inviter profile ID is required', ErrorCodes.VALIDATION_ERROR, 400, 'invitedByProfileId');
+  }
+
+  return inviteTeamMembersSecure(orgId, emails, roleId, invitedByProfileId);
+}
+
+/**
+ * Removes a team member from an organization
+ * @param orgId - The organization ID
+ * @param memberId - The member ID to remove
+ * @returns Deleted member
+ */
+export async function removeTeamMember(orgId: string, memberId: number, removedByProfileId?: string) {
+  try {
+    const deleted = await deleteOrganizationMember(orgId, memberId);
+    if (!deleted) {
+      throw new AppError('Team member not found', ErrorCodes.ORG_TEAM_REMOVE_FAILED, 404);
+    }
+
+    if (deleted.email && removedByProfileId) {
+      await revokeActiveOrganizationInvitesByEmails(orgId, [deleted.email.toLowerCase()], removedByProfileId);
+    }
+
+    return deleted;
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to remove team member',
+      ErrorCodes.ORG_TEAM_REMOVE_FAILED,
+      500
+    );
+  }
+}
+
+/**
+ * Helper function to sum array object values by key
+ */
+function sumArrObject<T>(arr: T[], key: keyof T): number {
+  return arr.reduce((sum, item) => sum + ((item[key] as number) || 0), 0);
+}
+
+/**
+ * Helper function to calculate percentage with rounding
+ */
+function calcPercentageWithRounding(a: number, b: number): number {
+  if (b === 0) {
+    return 0;
+  }
+  const rawPercentage = (a / b) * 100;
+  const fixedString = rawPercentage.toFixed(1);
+  const roundedNumber = parseFloat(fixedString);
+  return isNaN(roundedNumber) ? 0 : roundedNumber;
+}
+
+/**
+ * Gets user analytics for an organization
+ * @param userId - The user ID (profile ID)
+ * @param orgId - The organization ID
+ * @returns User analytics data including courses, progress, and grades
+ */
+export async function getUserAnalytics(userId: string, orgId: string) {
+  try {
+    // Get user profile
+    const profile = await getProfileById(userId);
+    if (!profile) {
+      throw new AppError('User profile not found', ErrorCodes.PROFILE_NOT_FOUND, 404);
+    }
+
+    // Get last login
+    const lastSeen = await getLastLogin(userId);
+
+    // Get courses for this org where user is enrolled
+    const courses = await getEnrolledCourses({ orgId, profileId: userId });
+
+    // Build analytics data for each course
+    const coursesWithStats = await Promise.all(
+      courses.map(async (course) => {
+        const [userExercisesStats, courseProgress] = await Promise.all([
+          getUserExercisesStats(course.id, userId),
+          getProfileCourseProgress(course.id, userId)
+        ]);
+
+        const totalEarnedPoints = sumArrObject(userExercisesStats, 'score');
+        const totalPoints = sumArrObject(userExercisesStats, 'totalPoints');
+        const averageGrade = calcPercentageWithRounding(totalEarnedPoints, totalPoints);
+        const lessonsCompleted = courseProgress.lessons_completed || 0;
+        const lessonsCount = courseProgress.lessons_count || 0;
+
+        return {
+          ...course,
+          ...courseProgress,
+          progress_percentage: calcPercentageWithRounding(lessonsCompleted, lessonsCount),
+          average_grade: averageGrade
+        };
+      })
+    );
+
+    // Calculate overall stats
+    const totalLessons = coursesWithStats.reduce((acc, course) => acc + (course.lessons_count || 0), 0);
+    const completedLessons = coursesWithStats.reduce((acc, course) => acc + (course.lessons_completed || 0), 0);
+    const overallCourseProgress = calcPercentageWithRounding(completedLessons, totalLessons);
+
+    const allGrades = sumArrObject(coursesWithStats, 'average_grade');
+    const overallAverageGrade = calcPercentageWithRounding(allGrades, coursesWithStats.length);
+
+    return {
+      user: {
+        id: userId,
+        fullName: profile.fullname || '',
+        email: profile.email || '',
+        avatarUrl: profile.avatarUrl || '',
+        lastSeen: lastSeen || undefined
+      },
+      courses: coursesWithStats,
+      overallCourseProgress,
+      overallAverageGrade
+    };
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError(
+      error instanceof Error ? error.message : 'Failed to fetch user analytics',
+      ErrorCodes.INTERNAL_ERROR,
+      500
+    );
+  }
+}
