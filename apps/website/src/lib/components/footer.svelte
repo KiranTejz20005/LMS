@@ -56,13 +56,13 @@
   <div class="relative z-10 flex flex-col gap-10 lg:flex-row lg:justify-between">
     <!-- Brand -->
     <div class="flex flex-col gap-4 lg:max-w-[220px]">
-      <img width="32" height="32" loading="lazy" src="/logo-192.png" alt="ClassroomIO logo" />
+      <img width="32" height="32" loading="lazy" src="/logo-192.png" alt="GurukulX logo" />
       <p class="ui:text-muted-foreground text-sm leading-6">
         The Open Source LMS for compliance training and certification programs.
       </p>
       <div class="flex items-center gap-2">
         <a
-          href="https://www.facebook.com/classroomiohq"
+          href="https://www.facebook.com/gurukulxhq"
           target="_blank"
           aria-label="Facebook"
           class="ui:text-muted-foreground ui:hover:text-foreground p-1 transition-colors"
@@ -70,7 +70,7 @@
           <Facebook size={18} />
         </a>
         <a
-          href="https://twitter.com/classroomio"
+          href="https://twitter.com/gurukulx"
           target="_blank"
           aria-label="Twitter"
           class="ui:text-muted-foreground ui:hover:text-foreground p-1 transition-colors"
@@ -78,7 +78,7 @@
           <Twitter size={18} />
         </a>
         <a
-          href="https://www.youtube.com/@ClassroomIO"
+          href="https://www.youtube.com/@GurukulX"
           target="_blank"
           aria-label="YouTube"
           class="ui:text-muted-foreground ui:hover:text-foreground p-1 transition-colors"
@@ -152,14 +152,14 @@
           </li>
           <li>
             <a
-              href="https://classroomio.com/docs/"
+              href="https://gurukulx.com/docs/"
               target="_blank"
               class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Help Center</a
             >
           </li>
           <li>
             <a
-              href="https://classroomio.com/docs/quickstart/signup"
+              href="https://gurukulx.com/docs/quickstart/signup"
               target="_blank"
               class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Getting Started</a
             >
@@ -182,7 +182,7 @@
           </li>
           <li>
             <a
-              href="mailto:help@classroomio.com"
+              href="mailto:help@gurukulx.com"
               target="_blank"
               class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Support</a
             >
@@ -205,6 +205,6 @@
   <div
     class="ui:border-border ui:text-muted-foreground relative z-10 mt-10 border-t pt-6 text-center text-xs lg:text-left"
   >
-    All rights reserved — ClassroomIO © {new Date().getFullYear()}
+    All rights reserved — GurukulX © {new Date().getFullYear()}
   </div>
 </footer>

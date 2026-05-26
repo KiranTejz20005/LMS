@@ -45,7 +45,7 @@
     <Button
       variant="ghost"
       data-cal-config="'layout':'month_view'"
-      data-cal-link="classroomio/demo"
+      data-cal-link="gurukulx/demo"
       class="relative z-10 mt-8 bg-white!"
     >
       {btnLabel}

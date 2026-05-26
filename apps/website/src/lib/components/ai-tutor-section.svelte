@@ -40,7 +40,7 @@
     imageAlt = '',
     vimeoVideoId,
     videoAspect = '54.68%',
-    videoTitle = 'AI Teaching Assistant on ClassroomIO.',
+    videoTitle = 'AI Teaching Assistant on GurukulX.',
     bgClass = 'bg-white'
   } = $props();
 
@@ -56,7 +56,6 @@
 
 <section
   bind:this={sectionEl}
-  role="region"
   aria-label={title}
   onmouseenter={() => (inZone = true)}
   onmouseleave={() => (inZone = false)}

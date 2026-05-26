@@ -35,11 +35,11 @@
   } = $props();
 
   // Per-columns class string so Tailwind picks up the arbitrary nth-child variants statically.
-  const gridClass = {
+  const gridClass = $derived({
     2: 'sm:grid-cols-2 [&>*:nth-child(2n)]:sm:border-r-0 [&>*:nth-last-child(-n+2)]:sm:border-b-0',
     3: 'sm:grid-cols-2 lg:grid-cols-3 [&>*:nth-child(2n)]:sm:border-r-0 [&>*:nth-child(2n)]:lg:border-r [&>*:nth-child(3n)]:lg:border-r-0 [&>*:nth-last-child(-n+2)]:sm:border-b-0 [&>*:nth-last-child(-n+3)]:lg:border-b-0',
     4: 'sm:grid-cols-2 lg:grid-cols-4 [&>*:nth-child(2n)]:sm:border-r-0 [&>*:nth-child(2n)]:lg:border-r [&>*:nth-child(4n)]:lg:border-r-0 [&>*:nth-last-child(-n+2)]:sm:border-b-0 [&>*:nth-last-child(-n+4)]:lg:border-b-0'
-  }[columns];
+  }[columns]);
 </script>
 
 <section class="px-6 py-12 lg:px-12 lg:py-16 {bgClass}">

@@ -101,7 +101,7 @@
     </p>
 
     <div class="mt-7 flex flex-wrap items-center justify-center gap-3">
-      <Button data-cal-config="'layout':'month_view'" data-cal-link="classroomio/demo">Book a Demo</Button>
+      <Button data-cal-config="'layout':'month_view'" data-cal-link="gurukulx/demo">Book a Demo</Button>
       <Button href="/signup" variant="outline">Start free</Button>
     </div>
   </div>

@@ -17,11 +17,11 @@
   /** @type {Props} */
   let { items, cell, cols = 3, bgClass = 'bg-white', padding = 'p-6 lg:p-8', animate = true } = $props();
 
-  const colsClass = {
+  const colsClass = $derived({
     2: 'sm:grid-cols-2',
     3: 'sm:grid-cols-3',
     4: 'sm:grid-cols-4'
-  }[cols];
+  }[cols]);
 </script>
 
 <div class="grid grid-cols-1 overflow-hidden rounded-2xl border border-gray-200 {bgClass} {colsClass}">

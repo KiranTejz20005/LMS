@@ -1,3 +1,4 @@
+import { dev } from '$app/environment';
 import { client } from '$lib/utils/posthog';
 import { redirect } from '@sveltejs/kit';
 
@@ -9,5 +10,6 @@ export const load = ({ request, url }) => {
     event: 'signup'
   });
 
-  redirect(307, `https://app.classroomio.com/signup${url.search ?? ''}`);
+  const baseUrl = dev ? 'http://localhost:5173' : 'https://app.gurukulx.com';
+  redirect(307, `${baseUrl}/signup${url.search ?? ''}`);
 };

@@ -10,8 +10,8 @@ export const load = async ({ request }) => {
 
   return {
     pageMetaTags: {
-      title: 'Terms of Service | ClassroomIO',
-      description: 'Terms governing your access to and use of ClassroomIO websites, content, and services.'
+      title: 'Terms of Service | GurukulX',
+      description: 'Terms governing your access to and use of GurukulX websites, content, and services.'
     }
   };
 };

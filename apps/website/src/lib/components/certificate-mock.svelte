@@ -3,7 +3,7 @@
   import { renderCertificateDocument, DEFAULT_CERTIFICATE_DESIGN } from '@cio/certificates';
 
   /**
-   * Renders the default ClassroomIO certificate template (classique) in an iframe.
+   * Renders the default GurukulX certificate template (classique) in an iframe.
    * Used on customer-education and compliance-training pages.
    *
    * @typedef {Object} Props
@@ -11,7 +11,7 @@
    * @property {string} achievement         Course or program name
    * @property {string} issued              Issue date (e.g. "11 May 2026")
    * @property {string} verifyValue         Certificate ID rendered in the seal
-   * @property {string} [orgName]           Org name shown on the top tag (default "ClassroomIO")
+   * @property {string} [orgName]           Org name shown on the top tag (default "GurukulX")
    * @property {string} [courseDescription] Body description (default derived from achievement)
    */
 
@@ -21,18 +21,18 @@
     achievement,
     issued,
     verifyValue,
-    orgName = 'ClassroomIO',
+    orgName = 'GurukulX',
     courseDescription = `For successfully completing ${achievement}.`
   } = $props();
 
-  const srcdoc = renderCertificateDocument(DEFAULT_CERTIFICATE_DESIGN, {
+  const srcdoc = $derived(renderCertificateDocument(DEFAULT_CERTIFICATE_DESIGN, {
     recipientName: recipient,
     courseName: achievement,
     courseDescription,
     orgName,
     date: issued,
     certificateId: verifyValue
-  });
+  }));
 
   const NATIVE_W = 1100;
   const NATIVE_H = 780;

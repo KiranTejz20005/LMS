@@ -14,11 +14,7 @@
   let { isOrg = false, className = '' } = $props();
 
   function handleClick() {
-    if (!isOrg) {
-      return goto('/');
-    }
-
-    return goto('https://classroomio.com');
+    return goto('/');
   }
 </script>
 
