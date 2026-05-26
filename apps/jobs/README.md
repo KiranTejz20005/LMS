@@ -1,6 +1,6 @@
 # @cio/jobs-worker
 
-BullMQ worker process for ClassroomIO. Runs every background job the
+BullMQ worker process for GurukulX. Runs every background job the
 `@cio/api` enqueues — emails, lesson video post-processing (probe / thumbnail /
 extract-audio / transcribe), and maintenance tasks.
 

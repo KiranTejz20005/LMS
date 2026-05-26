@@ -3531,14 +3531,14 @@
       "setup": {
         "title": "Configuração do cliente",
         "description": "Use uma chave com escopo organizacional por integração. Se uma chave for rotacionada ou revogada, o cliente para de funcionar até que o novo segredo seja configurado.",
-        "claude_code_description": "Registra `@classroomio/mcp` com Claude Code usando a chave gerada com escopo organizacional.",
+        "claude_code_description": "Registra `@GurukulX/mcp` com Claude Code usando a chave gerada com escopo organizacional.",
         "codex_description": "Adiciona o servidor GurukulX MCP ao Codex com a mesma chave com escopo organizacional.",
         "cursor_description": "Cole isso em `~/.cursor/mcp.json` ou na configuração do MCP do seu espaço de trabalho.",
         "opencode_description": "Adicione isso a `opencode.json` na raiz do projeto ou a `~/.config/opencode/opencode.json`."
       },
       "keys": {
         "title": "Chaves MCP",
-        "description": "Essas chaves autenticam a organização atual quando um cliente MCP chama GurukulX por meio de `@classroomio/mcp`.",
+        "description": "Essas chaves autenticam a organização atual quando um cliente MCP chama GurukulX por meio de `@GurukulX/mcp`.",
         "generate": "Gerar chave MCP",
         "secret_once": "Este segredo é mostrado uma vez. Copie-o para o seu cliente MCP agora.",
         "modal": {
@@ -3997,7 +3997,7 @@
       "border_radius": "Raio da borda",
       "font_family": "Família de fontes",
       "font_scale": "Escala de tamanho da fonte",
-      "show_powered_by": "Mostrar a marca Classroomio",
+      "show_powered_by": "Mostrar a marca GurukulX",
       "custom_css": "CSS personalizado",
       "custom_css_locked": "Atualize para ativar CSS personalizado.",
       "embed_code": "Incorporar código",

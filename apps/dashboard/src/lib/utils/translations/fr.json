@@ -3531,14 +3531,14 @@
       "setup": {
         "title": "Configuration du client",
         "description": "Utilisez une clé à l’échelle de l’organisation par intégration. Si une clé est alternée ou révoquée, le client cesse de fonctionner jusqu'à ce que le nouveau secret soit configuré.",
-        "claude_code_description": "Enregistre `@classroomio/mcp` auprès de Claude Code à l'aide de la clé générée à l'échelle de l'organisation.",
+        "claude_code_description": "Enregistre `@GurukulX/mcp` auprès de Claude Code à l'aide de la clé générée à l'échelle de l'organisation.",
         "codex_description": "Ajoute le serveur GurukulX MCP au Codex avec la même clé de portée organisationnelle.",
         "cursor_description": "Collez-le dans `~/.cursor/mcp.json` ou dans la configuration MCP de votre espace de travail.",
         "opencode_description": "Ajoutez ceci à `opencode.json` à la racine du projet ou à `~/.config/opencode/opencode.json`."
       },
       "keys": {
         "title": "Clés MCP",
-        "description": "Ces clés authentifient l'organisation actuelle lorsqu'un client MCP appelle GurukulX via `@classroomio/mcp`.",
+        "description": "Ces clés authentifient l'organisation actuelle lorsqu'un client MCP appelle GurukulX via `@GurukulX/mcp`.",
         "generate": "Générer une clé MCP",
         "secret_once": "Ce secret est montré une fois. Copiez-le dans votre client MCP maintenant.",
         "modal": {
@@ -3997,7 +3997,7 @@
       "border_radius": "Rayon de la frontière",
       "font_family": "Famille de polices",
       "font_scale": "Échelle de taille de police",
-      "show_powered_by": "Afficher la marque Classroomio",
+      "show_powered_by": "Afficher la marque GurukulX",
       "custom_css": "CSS personnalisé",
       "custom_css_locked": "Mettez à niveau pour activer le CSS personnalisé.",
       "embed_code": "Code intégré",

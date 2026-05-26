@@ -3531,14 +3531,14 @@
       "setup": {
         "title": "Client-Setup",
         "description": "Verwenden Sie einen organisationsweiten Schlüssel pro Integration. Wenn ein Schlüssel rotiert oder widerrufen wird, funktioniert der Client nicht mehr, bis das neue Geheimnis konfiguriert ist.",
-        "claude_code_description": "Registriert „@classroomio/mcp“ bei Claude Code unter Verwendung des generierten organisationsweit gültigen Schlüssels.",
+        "claude_code_description": "Registriert „@GurukulX/mcp“ bei Claude Code unter Verwendung des generierten organisationsweit gültigen Schlüssels.",
         "codex_description": "Fügt den GurukulX MCP-Server mit demselben organisationsweit gültigen Schlüssel zu Codex hinzu.",
         "cursor_description": "Fügen Sie dies in „~/.cursor/mcp.json“ oder Ihre Workspace-MCP-Konfiguration ein.",
         "opencode_description": "Fügen Sie dies in `opencode.json` im Projektstamm oder in `~/.config/opencode/opencode.json` ein."
       },
       "keys": {
         "title": "MCP-Schlüssel",
-        "description": "Diese Schlüssel authentifizieren die aktuelle Organisation, wenn ein MCP-Client GurukulX über „@classroomio/mcp“ aufruft.",
+        "description": "Diese Schlüssel authentifizieren die aktuelle Organisation, wenn ein MCP-Client GurukulX über „@GurukulX/mcp“ aufruft.",
         "generate": "MCP-Schlüssel generieren",
         "secret_once": "Dieses Geheimnis wird einmal gezeigt. Kopieren Sie es jetzt in Ihren MCP-Client.",
         "modal": {
@@ -3997,7 +3997,7 @@
       "border_radius": "Grenzradius",
       "font_family": "Schriftfamilie",
       "font_scale": "Schriftgrößenskala",
-      "show_powered_by": "Classroomio-Branding anzeigen",
+      "show_powered_by": "GurukulX-Branding anzeigen",
       "custom_css": "Benutzerdefiniertes CSS",
       "custom_css_locked": "Führen Sie ein Upgrade durch, um benutzerdefiniertes CSS zu aktivieren.",
       "embed_code": "Code einbetten",

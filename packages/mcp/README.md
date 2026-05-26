@@ -1,8 +1,8 @@
-# @classroomio/mcp
+# @GurukulX/mcp
 
-Thin stdio MCP server for ClassroomIO course authoring.
+Thin stdio MCP server for GurukulX course authoring.
 
-The package does not parse PDFs or generate course structures. The agent does that work. `@classroomio/mcp` only exposes tools, validates tool input, and forwards requests to the ClassroomIO API.
+The package does not parse PDFs or generate course structures. The agent does that work. `@GurukulX/mcp` only exposes tools, validates tool input, and forwards requests to the GurukulX API.
 
 ## Architecture
 
@@ -15,25 +15,25 @@ Claude Code / Codex / Cursor / OpenCode / other MCP client
   | 1. Reads prompt, PDF, or existing course goal
   | 2. Produces or edits normalized course JSON
   v
-@classroomio/mcp (stdio)
+@GurukulX/mcp (stdio)
   |
   | 3. Sends authenticated tool calls
   |    Authorization: Bearer <cio_mcp_...>
   v
-ClassroomIO API
+GurukulX API
   |
   | 4. Validates payloads
   | 5. Resolves the organization from the key
   | 6. Creates drafts or applies changes to a course
   v
-ClassroomIO DB
+GurukulX DB
 ```
 
 ## Principles
 
 1. The agent owns reasoning.
 2. The MCP package owns transport and input validation.
-3. ClassroomIO API remains the trust boundary for auth, validation, and persistence.
+3. GurukulX API remains the trust boundary for auth, validation, and persistence.
 4. Draft creation and publish are separate operations.
 5. Updating an existing course is done through a seeded draft, not blind writes to the live course.
 
@@ -61,11 +61,11 @@ Current tools:
 
 ## Auth Model
 
-The package expects an org-scoped ClassroomIO automation key generated from `Automation -> MCP` in the ClassroomIO dashboard.
+The package expects an org-scoped GurukulX automation key generated from `Automation -> MCP` in the GurukulX dashboard.
 
 The MCP process sends the key as a bearer token on every request.
 
-ClassroomIO API:
+GurukulX API:
 
 1. hashes and verifies the key
 2. resolves the owning organization
@@ -76,27 +76,27 @@ The MCP package never decides permissions.
 
 ## Required Environment Variables
 
-- `CLASSROOMIO_API_URL`
-- `CLASSROOMIO_API_KEY`
-- `CLASSROOMIO_USER_AGENT` optional
+- `GurukulX_API_URL`
+- `GurukulX_API_KEY`
+- `GurukulX_USER_AGENT` optional
 
 ## Run Locally
 
 From the repo root:
 
 ```bash
-pnpm build --filter=@classroomio/mcp
-CLASSROOMIO_API_URL=http://localhost:3081 \
-CLASSROOMIO_API_KEY=<cio_mcp_key> \
+pnpm build --filter=@GurukulX/mcp
+GurukulX_API_URL=http://localhost:3081 \
+GurukulX_API_KEY=<cio_mcp_key> \
 node packages/mcp/dist/index.js
 ```
 
 Published package:
 
 ```bash
-CLASSROOMIO_API_URL=https://api.classroomio.com \
-CLASSROOMIO_API_KEY=<cio_mcp_key> \
-npx -y @classroomio/mcp
+GurukulX_API_URL=https://api.GurukulX.com \
+GurukulX_API_KEY=<cio_mcp_key> \
+npx -y @GurukulX/mcp
 ```
 
 ## Client Setup
@@ -104,12 +104,12 @@ npx -y @classroomio/mcp
 ### Claude Code
 
 ```bash
-claude mcp add-json classroomio '{
+claude mcp add-json GurukulX '{
   "command": "npx",
-  "args": ["-y", "@classroomio/mcp"],
+  "args": ["-y", "@GurukulX/mcp"],
   "env": {
-    "CLASSROOMIO_API_URL": "https://api.classroomio.com",
-    "CLASSROOMIO_API_KEY": "<cio_mcp_key>"
+    "GurukulX_API_URL": "https://api.GurukulX.com",
+    "GurukulX_API_KEY": "<cio_mcp_key>"
   }
 }'
 ```
@@ -117,10 +117,10 @@ claude mcp add-json classroomio '{
 ### Codex
 
 ```bash
-codex mcp add classroomio \
-  --env CLASSROOMIO_API_URL=https://api.classroomio.com \
-  --env CLASSROOMIO_API_KEY=<cio_mcp_key> \
-  -- npx -y @classroomio/mcp
+codex mcp add GurukulX \
+  --env GurukulX_API_URL=https://api.GurukulX.com \
+  --env GurukulX_API_KEY=<cio_mcp_key> \
+  -- npx -y @GurukulX/mcp
 ```
 
 ### OpenCode
@@ -129,13 +129,13 @@ codex mcp add classroomio \
 {
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "classroomio": {
+    "GurukulX": {
       "type": "local",
-      "command": ["npx", "-y", "@classroomio/mcp"],
+      "command": ["npx", "-y", "@GurukulX/mcp"],
       "enabled": true,
       "environment": {
-        "CLASSROOMIO_API_URL": "https://api.classroomio.com",
-        "CLASSROOMIO_API_KEY": "<cio_mcp_key>"
+        "GurukulX_API_URL": "https://api.GurukulX.com",
+        "GurukulX_API_KEY": "<cio_mcp_key>"
       }
     }
   }
@@ -147,12 +147,12 @@ codex mcp add classroomio \
 ```json
 {
   "mcpServers": {
-    "classroomio": {
+    "GurukulX": {
       "command": "npx",
-      "args": ["-y", "@classroomio/mcp"],
+      "args": ["-y", "@GurukulX/mcp"],
       "env": {
-        "CLASSROOMIO_API_URL": "https://api.classroomio.com",
-        "CLASSROOMIO_API_KEY": "<cio_mcp_key>"
+        "GurukulX_API_URL": "https://api.GurukulX.com",
+        "GurukulX_API_KEY": "<cio_mcp_key>"
       }
     }
   }
@@ -190,7 +190,7 @@ Lesson authoring rule:
 - do not include the lesson title
 - do not use `h1` or `h2` in lesson content
 - start headings at `h3`
-- ClassroomIO already renders the lesson title in the course UI
+- GurukulX already renders the lesson title in the course UI
 
 ## After Publish
 
@@ -279,7 +279,7 @@ The tool can either:
 User says:
 
 ```text
-I have my course in a PDF. Extract it and turn it into a ClassroomIO course draft.
+I have my course in a PDF. Extract it and turn it into a GurukulX course draft.
 ```
 
 Expected tool sequence:
@@ -314,7 +314,7 @@ Expected tool sequence:
 Result:
 
 - the draft stores tag names
-- publish ensures the tags exist in ClassroomIO
+- publish ensures the tags exist in GurukulX
 - publish assigns those tags to the live course
 
 ### Flow 5: Update an existing course safely
@@ -392,7 +392,7 @@ When a draft is seeded from a live course:
 
 As long as the agent preserves those IDs while editing the draft, publish-to-existing-course can map draft items back to the live records and update them safely.
 
-If the agent adds a brand new section or lesson, it should assign a new synthetic `externalId`. ClassroomIO will create that record on publish.
+If the agent adds a brand new section or lesson, it should assign a new synthetic `externalId`. GurukulX will create that record on publish.
 
 ## Input Contract Notes
 

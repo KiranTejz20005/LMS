@@ -3531,14 +3531,14 @@
       "setup": {
         "title": "Настройка клиента",
         "description": "Используйте один ключ на уровне организации для каждой интеграции. Если ключ заменен или отозван, клиент перестает работать до тех пор, пока не будет настроен новый секрет.",
-        "claude_code_description": "Регистрирует `@classroomio/mcp` в Claude Code, используя сгенерированный ключ на уровне организации.",
+        "claude_code_description": "Регистрирует `@GurukulX/mcp` в Claude Code, используя сгенерированный ключ на уровне организации.",
         "codex_description": "Добавляет сервер GurukulX MCP в Кодекс с тем же ключом на уровне организации.",
         "cursor_description": "Вставьте это в `~/.cursor/mcp.json` или в конфигурацию MCP вашей рабочей области.",
         "opencode_description": "Добавьте это в `opencode.json` в корне проекта или в `~/.config/opencode/opencode.json`."
       },
       "keys": {
         "title": "Ключи MCP",
-        "description": "Эти ключи аутентифицируют текущую организацию, когда клиент MCP вызывает GurukulX через @classroomio/mcp.",
+        "description": "Эти ключи аутентифицируют текущую организацию, когда клиент MCP вызывает GurukulX через @GurukulX/mcp.",
         "generate": "Создать ключ MCP",
         "secret_once": "Этот секрет раскрывается один раз. Скопируйте его в свой клиент MCP сейчас.",
         "modal": {
@@ -3997,7 +3997,7 @@
       "border_radius": "Радиус границы",
       "font_family": "Семейство шрифтов",
       "font_scale": "Шкала размера шрифта",
-      "show_powered_by": "Показать брендинг Classroomio",
+      "show_powered_by": "Показать брендинг GurukulX",
       "custom_css": "Пользовательский CSS",
       "custom_css_locked": "Обновите, чтобы включить пользовательский CSS.",
       "embed_code": "Встроить код",

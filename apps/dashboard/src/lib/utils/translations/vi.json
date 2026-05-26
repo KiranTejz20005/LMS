@@ -3531,14 +3531,14 @@
       "setup": {
         "title": "Thiết lập máy khách",
         "description": "Sử dụng một khóa trong phạm vi tổ chức cho mỗi lần tích hợp. Nếu một khóa bị xoay hoặc bị thu hồi, máy khách sẽ ngừng hoạt động cho đến khi bí mật mới được định cấu hình.",
-        "claude_code_description": "Đăng ký `@classroomio/mcp` với Mã Claude bằng cách sử dụng khóa trong phạm vi tổ chức được tạo.",
+        "claude_code_description": "Đăng ký `@GurukulX/mcp` với Mã Claude bằng cách sử dụng khóa trong phạm vi tổ chức được tạo.",
         "codex_description": "Thêm máy chủ GurukulX MCP vào Codex bằng cùng một khóa trong phạm vi tổ chức.",
         "cursor_description": "Dán cái này vào `~/.cursor/mcp.json` hoặc cấu hình MCP không gian làm việc của bạn.",
         "opencode_description": "Thêm nội dung này vào `opencode.json` ở thư mục gốc dự án hoặc `~/.config/opencode/opencode.json`."
       },
       "keys": {
         "title": "Khóa MCP",
-        "description": "Các khóa này xác thực tổ chức hiện tại khi máy khách MCP gọi GurukulX thông qua `@classroomio/mcp`.",
+        "description": "Các khóa này xác thực tổ chức hiện tại khi máy khách MCP gọi GurukulX thông qua `@GurukulX/mcp`.",
         "generate": "Tạo khóa MCP",
         "secret_once": "Bí mật này được hiển thị một lần. Sao chép nó vào ứng dụng khách MCP của bạn ngay bây giờ.",
         "modal": {
@@ -3997,7 +3997,7 @@
       "border_radius": "Bán kính viền",
       "font_family": "Họ phông chữ",
       "font_scale": "Tỷ lệ cỡ chữ",
-      "show_powered_by": "Hiển thị nhãn hiệu Classroomio",
+      "show_powered_by": "Hiển thị nhãn hiệu GurukulX",
       "custom_css": "CSS tùy chỉnh",
       "custom_css_locked": "Nâng cấp để kích hoạt CSS tùy chỉnh.",
       "embed_code": "Nhúng mã",

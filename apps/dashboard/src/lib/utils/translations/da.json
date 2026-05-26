@@ -3531,14 +3531,14 @@
       "setup": {
         "title": "Klient opsætning",
         "description": "Brug én nøgle med organisationsomfang pr. integration. Hvis en nøgle roteres eller tilbagekaldes, holder klienten op med at arbejde, indtil den nye hemmelighed er konfigureret.",
-        "claude_code_description": "Registrerer `@classroomio/mcp` med Claude Code ved hjælp af den genererede org-omfangede nøgle.",
+        "claude_code_description": "Registrerer `@GurukulX/mcp` med Claude Code ved hjælp af den genererede org-omfangede nøgle.",
         "codex_description": "Tilføjer GurukulX MCP-serveren til Codex med den samme org-omfattede nøgle.",
         "cursor_description": "Indsæt dette i `~/.cursor/mcp.json` eller dit arbejdsområde MCP-konfiguration.",
         "opencode_description": "Tilføj dette til `opencode.json` i projektroden eller `~/.config/opencode/opencode.json`."
       },
       "keys": {
         "title": "MCP nøgler",
-        "description": "Disse nøgler autentificerer den aktuelle organisation, når en MCP-klient ringer til GurukulX gennem `@classroomio/mcp`.",
+        "description": "Disse nøgler autentificerer den aktuelle organisation, når en MCP-klient ringer til GurukulX gennem `@GurukulX/mcp`.",
         "generate": "Generer MCP-nøgle",
         "secret_once": "Denne hemmelighed vises én gang. Kopier det til din MCP-klient nu.",
         "modal": {
@@ -3997,7 +3997,7 @@
       "border_radius": "Grænseradius",
       "font_family": "Fontfamilie",
       "font_scale": "Skriftstørrelsesskala",
-      "show_powered_by": "Vis Classroomio branding",
+      "show_powered_by": "Vis GurukulX branding",
       "custom_css": "Brugerdefineret CSS",
       "custom_css_locked": "Opgrader for at aktivere tilpasset CSS.",
       "embed_code": "Integrer kode",

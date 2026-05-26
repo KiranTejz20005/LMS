@@ -1,4 +1,4 @@
-# ClassroomIO Backend
+# GurukulX Backend
 
 ## Supported Features
 

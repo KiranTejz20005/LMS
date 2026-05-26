@@ -1383,7 +1383,7 @@
       "border_radius": "Border radius",
       "font_family": "Font family",
       "font_scale": "Font size scale",
-      "show_powered_by": "Show Classroomio branding",
+      "show_powered_by": "Show GurukulX branding",
       "custom_css": "Custom CSS",
       "custom_css_locked": "Upgrade to enable custom CSS.",
       "custom_css_hint": "Max 5,000 characters.",
@@ -3738,7 +3738,7 @@
       },
       "keys": {
         "title": "MCP keys",
-        "description": "These keys authenticate the current organization when an MCP client calls GurukulX through `@classroomio/mcp`.",
+        "description": "These keys authenticate the current organization when an MCP client calls GurukulX through `@GurukulX/mcp`.",
         "generate": "Generate MCP key",
         "secret_once": "This secret is shown once. Copy it into your MCP client now.",
         "modal": {
@@ -3753,7 +3753,7 @@
       "setup": {
         "title": "Client setup",
         "description": "Use one org-scoped key per integration. If a key is rotated or revoked, the client stops working until the new secret is configured.",
-        "claude_code_description": "Registers `@classroomio/mcp` with Claude Code using the generated org-scoped key.",
+        "claude_code_description": "Registers `@GurukulX/mcp` with Claude Code using the generated org-scoped key.",
         "codex_description": "Adds the GurukulX MCP server to Codex with the same org-scoped key.",
         "cursor_description": "Paste this into `~/.cursor/mcp.json` or your workspace MCP config.",
         "opencode_description": "Add this to `opencode.json` in your project root or `~/.config/opencode/opencode.json`."
