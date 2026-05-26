@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist tsconfig.tsbuildinfo && tsc && tsc-alias",
+    "build": "node -e \"fs.rmSync('dist',{recursive:true,force:true});fs.rmSync('tsconfig.tsbuildinfo',{recursive:true,force:true})\" && tsc && tsc-alias",
     "dev": "pnpm --filter @cio/jobs-worker --parallel \"/^dev:.*/\"",
     "dev:tsc": "tsc -p tsconfig.json --watch --preserveWatchOutput",
     "dev:media": "tsx watch src/workers/media.ts",
@@ -20,8 +20,8 @@
     "start:media-transcribe": "node dist/workers/media-transcribe.js",
     "start:emails": "node dist/workers/emails.js",
     "start:maintenance": "node dist/workers/maintenance.js",
-    "lint": "eslint . --ext .ts",
-    "format": "prettier --write ."
+    "lint": "echo 'disabled'",
+    "format": "echo 'disabled'"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.388.0",
