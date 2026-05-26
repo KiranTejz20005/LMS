@@ -1,5 +1,4 @@
 import {
-  ApiIcon,
   ChartColumnIcon,
   AttachmentIcon,
   CommunityIcon,
@@ -11,12 +10,10 @@ import {
   PeopleIcon,
   SettingsIcon,
   SetupIcon,
-  TagIcon,
-  ZapIcon
+  TagIcon
 } from '@cio/ui/custom/moving-icons';
 
 import type { AccountOrg } from '$features/app/types';
-import BotIcon from '@lucide/svelte/icons/bot';
 import type { Component } from 'svelte';
 import { isActive } from '$lib/utils/functions/app';
 
@@ -164,33 +161,6 @@ export const baseNavConfig: NavItemConfig[] = [
     path: '/audience',
     icon: PeopleIcon,
     matchPattern: '^/org/[^/]+/audience(/.*)?$' // Matches nested routes
-  },
-  {
-    group: 'automation',
-    titleKey: 'automation.tabs.mcp',
-    path: '/mcp',
-    icon: BotIcon,
-    requiresAdmin: true,
-    disableWhenNotAdmin: true,
-    matchPattern: '^/org/[^/]+/mcp(/.*)?$'
-  },
-  {
-    group: 'automation',
-    titleKey: 'automation.tabs.api',
-    path: '/api',
-    icon: ApiIcon,
-    requiresAdmin: true,
-    disableWhenNotAdmin: true,
-    matchPattern: '^/org/[^/]+/api(/.*)?$'
-  },
-  {
-    group: 'automation',
-    titleKey: 'automation.tabs.zapier',
-    path: '/zapier',
-    icon: ZapIcon,
-    requiresAdmin: true,
-    disableWhenNotAdmin: true,
-    matchPattern: '^/org/[^/]+/zapier(/.*)?$'
   },
   {
     titleKey: 'org_navigation.settings',
@@ -346,7 +316,6 @@ const GROUP_ORDER: Array<{ key: string | null; labelKey: string | null }> = [
   { key: 'home', labelKey: 'org_navigation.home' },
   { key: 'content', labelKey: 'org_navigation.content' },
   { key: 'people', labelKey: 'org_navigation.people' },
-  { key: 'automation', labelKey: 'org_navigation.automation' },
   { key: null, labelKey: null }
 ];
 
