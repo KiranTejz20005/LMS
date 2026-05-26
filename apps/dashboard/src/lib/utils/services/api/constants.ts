@@ -4,9 +4,9 @@ import { env } from '$env/dynamic/public';
 // Default configuration
 export const DEFAULT_CONFIG: Required<ApiClientConfig> = {
   baseURL: env.PUBLIC_SERVER_URL || '',
-  timeout: 30000, // 30 seconds
-  retries: 1,
-  retryDelay: 1000, // 1 second
+  timeout: 5000, // 5 seconds
+  retries: 0,
+  retryDelay: 500, // 0.5 seconds
   customFetch: (input: RequestInfo | URL, init?: RequestInit) => fetch(input, init),
   onAuthError: async () => {
     // Default: redirect to login or refresh token

@@ -5,10 +5,10 @@ import { env } from '$env/dynamic/public';
 
 const isSelfHosted = PUBLIC_IS_SELFHOSTED === 'true';
 
-const DEFAULT_TITLE = 'ClassroomIO | The Open Source Learning Management System for Companies';
+const DEFAULT_TITLE = 'GurukulX | The Open Source Learning Management System for Companies';
 const DEFAULT_DESCRIPTION =
   'A flexible, user-friendly platform for creating, managing, and delivering courses for companies and training organisations';
-const CLOUD_OG_IMAGE = 'https://brand.cdn.clsrio.com/og/classroomio-og.png';
+const CLOUD_OG_IMAGE = 'https://brand.cdn.clsrio.com/og/gurukulx-og.png';
 
 function resolveOgImageUrl(url: URL, orgSiteInfo: OrgSiteInfo): string {
   const envUrl = env.PUBLIC_OG_IMAGE_URL?.trim();
@@ -46,7 +46,7 @@ export function getBaseMetaTags(url: URL, orgSiteInfo: OrgSiteInfo): MetaTagsPro
   const siteName =
     env.PUBLIC_APP_TITLE?.trim() ||
     (isSelfHosted && orgSiteInfo.org?.name ? orgSiteInfo.org.name : null) ||
-    'ClassroomIO';
+    'GurukulX';
 
   const ogImageUrl = resolveOgImageUrl(url, orgSiteInfo);
 
@@ -73,8 +73,8 @@ export function getBaseMetaTags(url: URL, orgSiteInfo: OrgSiteInfo): MetaTagsPro
       ]
     },
     twitter: {
-      handle: '@classroomio',
-      site: '@classroomio',
+      handle: '@gurukulx',
+      site: '@gurukulx',
       cardType: 'summary_large_image' as const,
       title,
       description,

@@ -1,4 +1,4 @@
-import { BaseApiWithErrors, classroomio } from '$lib/utils/services/api';
+import { BaseApiWithErrors, gurukulx } from '$lib/utils/services/api';
 import type {
   CommunityQuestionSuccess,
   CommunityQuestionsSuccess,
@@ -72,8 +72,8 @@ class CommunityApi extends BaseApiWithErrors {
    * @param orgId Organization ID
    */
   async fetchCommunityQuestions({ orgId }: { orgId: string }) {
-    await this.execute<typeof classroomio.community.$get>({
-      requestFn: () => classroomio.community.$get({ query: { orgId } }),
+    await this.execute<typeof gurukulx.community.$get>({
+      requestFn: () => gurukulx.community.$get({ query: { orgId } }),
       logContext: 'fetching community questions',
       onSuccess: (response) => {
         this.questions = response.data;
@@ -91,8 +91,8 @@ class CommunityApi extends BaseApiWithErrors {
    * @param slug Question slug
    */
   async fetchCommunityQuestion({ slug }: { slug: string }) {
-    await this.execute<(typeof classroomio.community)[':slug']['$get']>({
-      requestFn: () => classroomio.community[':slug'].$get({ param: { slug } }),
+    await this.execute<(typeof gurukulx.community)[':slug']['$get']>({
+      requestFn: () => gurukulx.community[':slug'].$get({ param: { slug } }),
       logContext: 'fetching community question',
       onSuccess: (response) => {
         if (response.data) {
@@ -132,7 +132,7 @@ class CommunityApi extends BaseApiWithErrors {
 
     await this.execute<CreateCommunityQuestionRequest>({
       requestFn: () =>
-        classroomio.community.$post({
+        gurukulx.community.$post({
           json: {
             title: result.data.title,
             body: result.data.body,
@@ -197,7 +197,7 @@ class CommunityApi extends BaseApiWithErrors {
     this.isCommenting = true;
     await this.execute<CreateCommentRequest>({
       requestFn: () =>
-        classroomio.community[':id'].comment.$post({
+        gurukulx.community[':id'].comment.$post({
           param: { id: String(questionId) },
           json: {
             body: result.data.body,
@@ -247,7 +247,7 @@ class CommunityApi extends BaseApiWithErrors {
   async upvotePost({ id, isQuestion }: { id: number | string; isQuestion: boolean }) {
     await this.execute<UpvotePostRequest>({
       requestFn: () =>
-        classroomio.community[':id'].upvote.$post({
+        gurukulx.community[':id'].upvote.$post({
           param: { id: id.toString() },
           json: { isQuestion }
         }),
@@ -297,7 +297,7 @@ class CommunityApi extends BaseApiWithErrors {
     this.isEditing = true;
     await this.execute<UpdateQuestionRequest>({
       requestFn: () =>
-        classroomio.community[':id'].$put({
+        gurukulx.community[':id'].$put({
           param: { id: String(questionId) },
           json: {
             title: result.data.title,
@@ -366,8 +366,8 @@ class CommunityApi extends BaseApiWithErrors {
    * @param questionId Question ID
    */
   async deleteQuestion(questionId: string) {
-    await this.execute<(typeof classroomio.community)[':id']['$delete']>({
-      requestFn: () => classroomio.community[':id'].$delete({ param: { id: questionId } }),
+    await this.execute<(typeof gurukulx.community)[':id']['$delete']>({
+      requestFn: () => gurukulx.community[':id'].$delete({ param: { id: questionId } }),
       logContext: 'deleting community question',
       onSuccess: () => {
         // Show success message
@@ -394,9 +394,9 @@ class CommunityApi extends BaseApiWithErrors {
    * @param commentId Comment ID
    */
   async deleteComment(commentId: string) {
-    await this.execute<(typeof classroomio.community)[':id']['comment']['$delete']>({
+    await this.execute<(typeof gurukulx.community)[':id']['comment']['$delete']>({
       requestFn: () =>
-        classroomio.community[':id'].comment.$delete({
+        gurukulx.community[':id'].comment.$delete({
           param: { id: commentId }
         }),
       logContext: 'deleting community comment',

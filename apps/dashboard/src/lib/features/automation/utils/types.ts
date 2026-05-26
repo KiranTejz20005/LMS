@@ -1,11 +1,11 @@
-import { classroomio, type InferResponseType } from '$lib/utils/services/api';
+import { gurukulx, type InferResponseType } from '$lib/utils/services/api';
 
-export type ListAutomationKeysRequest = (typeof classroomio.organization)['automation']['keys']['$get'];
-export type GetAutomationUsageRequest = (typeof classroomio.organization)['automation']['usage']['$get'];
-export type CreateAutomationKeyRequest = (typeof classroomio.organization)['automation']['keys']['$post'];
-export type RevokeAutomationKeyRequest = (typeof classroomio.organization)['automation']['keys'][':keyId']['$delete'];
+export type ListAutomationKeysRequest = (typeof gurukulx.organization)['automation']['keys']['$get'];
+export type GetAutomationUsageRequest = (typeof gurukulx.organization)['automation']['usage']['$get'];
+export type CreateAutomationKeyRequest = (typeof gurukulx.organization)['automation']['keys']['$post'];
+export type RevokeAutomationKeyRequest = (typeof gurukulx.organization)['automation']['keys'][':keyId']['$delete'];
 export type RotateAutomationKeyRequest =
-  (typeof classroomio.organization)['automation']['keys'][':keyId']['rotate']['$post'];
+  (typeof gurukulx.organization)['automation']['keys'][':keyId']['rotate']['$post'];
 
 export type ListAutomationKeysSuccess = Extract<InferResponseType<ListAutomationKeysRequest>, { success: true }>;
 export type GetAutomationUsageSuccess = Extract<InferResponseType<GetAutomationUsageRequest>, { success: true }>;

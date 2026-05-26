@@ -1,9 +1,9 @@
-import { classroomio, type InferResponseType } from '$lib/utils/services/api';
+import { gurukulx, type InferResponseType } from '$lib/utils/services/api';
 
-export type ListAccountWorkspacesRequest = typeof classroomio.account.workspaces.$get;
-export type CreateAccountWorkspaceRequest = typeof classroomio.account.workspaces.$post;
-export type DeleteAccountWorkspaceRequest = (typeof classroomio.account.workspaces)[':workspaceId']['$delete'];
-export type GetAccountUsageRequest = typeof classroomio.account.usage.$get;
+export type ListAccountWorkspacesRequest = typeof gurukulx.account.workspaces.$get;
+export type CreateAccountWorkspaceRequest = typeof gurukulx.account.workspaces.$post;
+export type DeleteAccountWorkspaceRequest = (typeof gurukulx.account.workspaces)[':workspaceId']['$delete'];
+export type GetAccountUsageRequest = typeof gurukulx.account.usage.$get;
 
 type ListSuccess = Extract<InferResponseType<ListAccountWorkspacesRequest>, { success: true }>;
 type UsageSuccess = Extract<InferResponseType<GetAccountUsageRequest>, { success: true }>;

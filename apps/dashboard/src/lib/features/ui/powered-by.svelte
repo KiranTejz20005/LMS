@@ -1,7 +1,7 @@
 <script lang="ts">
   import ArrowUpRightIcon from '@lucide/svelte/icons/arrow-up-right';
 
-  import { PublicCoursePoweredBy } from '@cio/ui/custom/public-course';
+  import PublicCoursePoweredBy from '@cio/ui/custom/public-course/powered-by.svelte';
   import { t } from '$lib/utils/functions/translations';
   import { currentOrg, isFreePlan } from '$lib/utils/store/org';
   import { cn } from '@cio/ui/tools';
@@ -44,7 +44,7 @@
   />
 {:else if $isFreePlan}
   <a
-    href={`https://classroomio.com?utm_source=${$currentOrg.siteName}.classroomio.com`}
+    href={`https://gurukulx.com?utm_source=${$currentOrg.siteName}.gurukulx.com`}
     target="_blank"
     class={cn('group fixed right-9 bottom-14 z-50 hover:no-underline', className)}
   >
@@ -62,7 +62,7 @@
       />
       <img src="/logo-192.png" alt="logo" class="h-[24px] opacity-100 group-hover:opacity-0" />
       {#if !showOnlyLogo}
-        {$t('course.navItem.landing_page.powered_by')} ClassroomIO
+        {$t('course.navItem.landing_page.powered_by')} GurukulX
       {/if}
     </span>
   </a>

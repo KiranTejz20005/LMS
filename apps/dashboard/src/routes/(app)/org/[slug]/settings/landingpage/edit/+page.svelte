@@ -127,7 +127,7 @@
 </script>
 
 <svelte:head>
-  <title>Landing Page Editor - ClassroomIO</title>
+  <title>Landing Page Editor - GurukulX</title>
 </svelte:head>
 
 <div

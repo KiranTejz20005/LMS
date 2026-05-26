@@ -7,8 +7,6 @@
   import { AppHeader } from '$features/ui';
   import { PUBLIC_IS_SELFHOSTED } from '$env/static/public';
 
-  import { VerifyEmailModal } from '$features/onboarding/components';
-
   import { OrgSidebar } from '$features/ui/sidebar/org-sidebar';
   import { AddOrgModal } from '$features/org';
 
@@ -29,8 +27,6 @@
 {#if PUBLIC_IS_SELFHOSTED !== 'true'}
   <AddOrgModal />
 {/if}
-
-<VerifyEmailModal />
 
 <Sidebar.Provider>
   <OrgSidebar />

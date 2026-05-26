@@ -48,7 +48,7 @@
 </script>
 
 <svelte:head>
-  <title>Reset Password - ClassroomIO</title>
+  <title>Reset Password - GurukulX</title>
 </svelte:head>
 
 <AuthUI

@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte';
   import { page } from '$app/state';
+  import { goto } from '$app/navigation';
   import * as Avatar from '@cio/ui/base/avatar';
   import { t } from '$lib/utils/functions/translations';
   import { currentOrg } from '$lib/utils/store/org';
@@ -44,7 +45,7 @@
 
     const params = new URLSearchParams(window.location.search);
     console.log({ params });
-    // const redirectTo = `https://app.classroomio.com?forwardTo=${
+    // const redirectTo = `https://app.gurukulx.com?forwardTo=${
     //   window.location.origin + params.get('redirect')
     // }`;
     const pathname = redirectPathname || params.get('redirect') || '';
@@ -67,6 +68,27 @@
     }
   }
 
+  async function signInAsGuest() {
+    if (isLoading) return;
+
+    const redirectTo = page.url.searchParams.get('redirect') || '/';
+
+    try {
+      const { error } = await authClient.signIn.anonymous({
+        fetchOptions: {
+          onSuccess: () => {
+            const redirect = redirectTo;
+            window.location.href = redirect.startsWith('/') ? redirect : `/?redirect=${encodeURIComponent(redirect)}`;
+          }
+        }
+      });
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Guest sign in failed:', error);
+    }
+  }
+
   const authBackgroundUrl = $derived($currentOrg.customization.auth?.backgroundImage?.trim() ?? '');
 </script>
 
@@ -85,9 +107,9 @@
         <Avatar.Root>
           <Avatar.Image
             src={$currentOrg.avatarUrl ? $currentOrg.avatarUrl : '/logo-192.png'}
-            alt={$currentOrg.name ? $currentOrg.name : 'ClassroomIO'}
+            alt={$currentOrg.name ? $currentOrg.name : 'GurukulX'}
           />
-          <Avatar.Fallback>{$currentOrg.name ? $currentOrg.name : 'ClassroomIO'}</Avatar.Fallback>
+          <Avatar.Fallback>{$currentOrg.name ? $currentOrg.name : 'GurukulX'}</Avatar.Fallback>
         </Avatar.Root>
 
         {#if !showOnlyContent}
@@ -123,6 +145,12 @@
               <span>
                 {isLogin ? $t('login.login_with_google') : $t('login.signup_with_google')}
               </span>
+            </Button>
+          {/if}
+
+          {#if isLogin}
+            <Button variant="ghost" onclick={signInAsGuest} disabled={isLoading} class="w-full">
+              Continue as Guest
             </Button>
           {/if}
         </div>

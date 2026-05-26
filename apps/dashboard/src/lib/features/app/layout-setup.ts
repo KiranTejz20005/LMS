@@ -101,7 +101,7 @@ function isURLCustomDomain(url: URL) {
     return false;
   }
 
-  const notCustomDomainHosts = [env.PRIVATE_APP_HOST || '', 'classroomio.com', 'myclassroomio.com'].filter(Boolean);
+  const notCustomDomainHosts = [env.PRIVATE_APP_HOST || '', 'gurukulx.com', 'mygurukulx.com'].filter(Boolean);
 
   return !notCustomDomainHosts.some((host) => url.host.endsWith(host));
 }

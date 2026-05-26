@@ -11,11 +11,11 @@ export function getAutomationSetupSecret(secret: string | null) {
 export function getClaudeCodeSnippet(secret: string | null) {
   const apiKey = getAutomationSetupSecret(secret);
 
-  return `claude mcp add-json classroomio '{
+  return `claude mcp add-json gurukulx '{
   "command": "npx",
   "args": ["-y", "@classroomio/mcp"],
   "env": {
-    "CLASSROOMIO_API_URL": "https://api.classroomio.com",
+    "CLASSROOMIO_API_URL": "https://api.gurukulx.com",
     "CLASSROOMIO_API_KEY": "${apiKey}"
   }
 }'`;
@@ -24,8 +24,8 @@ export function getClaudeCodeSnippet(secret: string | null) {
 export function getCodexSnippet(secret: string | null) {
   const apiKey = getAutomationSetupSecret(secret);
 
-  return `codex mcp add classroomio \\
-  --env CLASSROOMIO_API_URL=https://api.classroomio.com \\
+  return `codex mcp add gurukulx \\
+  --env CLASSROOMIO_API_URL=https://api.gurukulx.com \\
   --env CLASSROOMIO_API_KEY=${apiKey} \\
   -- npx -y @classroomio/mcp`;
 }
@@ -36,12 +36,12 @@ export function getOpenCodeSnippet(secret: string | null) {
   return `{
   "$schema": "https://opencode.ai/config.json",
   "mcp": {
-    "classroomio": {
+    "gurukulx": {
       "type": "local",
       "command": ["npx", "-y", "@classroomio/mcp"],
       "enabled": true,
       "environment": {
-        "CLASSROOMIO_API_URL": "https://api.classroomio.com",
+        "CLASSROOMIO_API_URL": "https://api.gurukulx.com",
         "CLASSROOMIO_API_KEY": "${apiKey}"
       }
     }
@@ -54,11 +54,11 @@ export function getCursorSnippet(secret: string | null) {
 
   return `{
   "mcpServers": {
-    "classroomio": {
+    "gurukulx": {
       "command": "npx",
       "args": ["-y", "@classroomio/mcp"],
       "env": {
-        "CLASSROOMIO_API_URL": "https://api.classroomio.com",
+        "CLASSROOMIO_API_URL": "https://api.gurukulx.com",
         "CLASSROOMIO_API_KEY": "${apiKey}"
       }
     }
@@ -69,11 +69,11 @@ export function getCursorSnippet(secret: string | null) {
 export function getDefaultAutomationKeyLabel(type: AutomationKeyType) {
   switch (type) {
     case 'mcp':
-      return 'ClassroomIO MCP';
+      return 'GurukulX MCP';
     case 'api':
-      return 'ClassroomIO API';
+      return 'GurukulX API';
     case 'zapier':
-      return 'ClassroomIO Zapier';
+      return 'GurukulX Zapier';
   }
 }
 

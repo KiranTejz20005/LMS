@@ -1,4 +1,4 @@
-import { classroomio, type InferResponseType } from '$lib/utils/services/api';
+import { gurukulx, type InferResponseType } from '$lib/utils/services/api';
 import type {
   TCreateWidget,
   TUpdateWidget,
@@ -7,13 +7,13 @@ import type {
   TWidgetPayload
 } from '@cio/utils/validation/widget';
 
-export type GetWidgetsRequest = (typeof classroomio.organization)['widgets']['$get'];
-export type GetWidgetDetailRequest = (typeof classroomio.organization)['widgets'][':widgetId']['$get'];
-export type CreateWidgetRequest = (typeof classroomio.organization)['widgets']['$post'];
-export type UpdateWidgetRequest = (typeof classroomio.organization)['widgets'][':widgetId']['$put'];
-export type PublishWidgetRequest = (typeof classroomio.organization)['widgets'][':widgetId']['publish']['$post'];
-export type RollbackWidgetRequest = (typeof classroomio.organization)['widgets'][':widgetId']['rollback']['$post'];
-export type DeleteWidgetRequest = (typeof classroomio.organization)['widgets'][':widgetId']['$delete'];
+export type GetWidgetsRequest = (typeof gurukulx.organization)['widgets']['$get'];
+export type GetWidgetDetailRequest = (typeof gurukulx.organization)['widgets'][':widgetId']['$get'];
+export type CreateWidgetRequest = (typeof gurukulx.organization)['widgets']['$post'];
+export type UpdateWidgetRequest = (typeof gurukulx.organization)['widgets'][':widgetId']['$put'];
+export type PublishWidgetRequest = (typeof gurukulx.organization)['widgets'][':widgetId']['publish']['$post'];
+export type RollbackWidgetRequest = (typeof gurukulx.organization)['widgets'][':widgetId']['rollback']['$post'];
+export type DeleteWidgetRequest = (typeof gurukulx.organization)['widgets'][':widgetId']['$delete'];
 
 export type GetWidgetsSuccess = Extract<InferResponseType<GetWidgetsRequest>, { success: true }>;
 export type WidgetListItem = GetWidgetsSuccess['data'][number];

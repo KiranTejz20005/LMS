@@ -1,11 +1,11 @@
 import type { MetaTagsProps } from 'svelte-meta-tags';
-import { classroomio, type InferResponseType } from '$lib/utils/services/api';
+import { gurukulx, type InferResponseType } from '$lib/utils/services/api';
 import { safeServerApi } from '$lib/utils/services/api/server';
 import { redirect } from '@sveltejs/kit';
 
-type GetPublicCoursesRequest = typeof classroomio.organization.courses.public.$get;
+type GetPublicCoursesRequest = typeof gurukulx.organization.courses.public.$get;
 type GetPublicCoursesSuccess = Extract<InferResponseType<GetPublicCoursesRequest>, { success: true }>;
-type GetPublicTagsRequest = typeof classroomio.organization.tags.public.$get;
+type GetPublicTagsRequest = typeof gurukulx.organization.tags.public.$get;
 type GetPublicTagsSuccess = Extract<InferResponseType<GetPublicTagsRequest>, { success: true }>;
 
 function normalizeTagsParam(rawTags: string | null): string[] {
@@ -34,7 +34,7 @@ export const load = async ({ parent, url }) => {
 
   const [coursesResult, tagsResult] = await Promise.all([
     safeServerApi<GetPublicCoursesSuccess>(() =>
-      classroomio.organization.courses.public.$get({
+      gurukulx.organization.courses.public.$get({
         query: {
           siteName,
           ...(normalizedTagsQuery ? { tags: normalizedTagsQuery } : {})
@@ -42,7 +42,7 @@ export const load = async ({ parent, url }) => {
       })
     ),
     safeServerApi<GetPublicTagsSuccess>(() =>
-      classroomio.organization.tags.public.$get({
+      gurukulx.organization.tags.public.$get({
         query: {
           siteName
         }

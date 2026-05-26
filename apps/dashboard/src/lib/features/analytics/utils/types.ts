@@ -1,9 +1,9 @@
-import { classroomio, type InferResponseType } from '$lib/utils/services/api';
+import { gurukulx, type InferResponseType } from '$lib/utils/services/api';
 
-export type LandingStatsRequest = (typeof classroomio.dash)['landing-stats']['$get'];
-export type CountryBreakdownRequest = (typeof classroomio.dash)['country-breakdown']['$get'];
-export type CourseFunnelRequest = (typeof classroomio.dash)['course-funnel']['$get'];
-export type PopularTypesRequest = (typeof classroomio.dash)['popular-types']['$get'];
+export type LandingStatsRequest = (typeof gurukulx.dash)['landing-stats']['$get'];
+export type CountryBreakdownRequest = (typeof gurukulx.dash)['country-breakdown']['$get'];
+export type CourseFunnelRequest = (typeof gurukulx.dash)['course-funnel']['$get'];
+export type PopularTypesRequest = (typeof gurukulx.dash)['popular-types']['$get'];
 
 export type LandingStatsSuccess = Extract<InferResponseType<LandingStatsRequest>, { success: true }>;
 export type CountryBreakdownSuccess = Extract<InferResponseType<CountryBreakdownRequest>, { success: true }>;

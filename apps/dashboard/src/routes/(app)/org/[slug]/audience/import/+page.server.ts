@@ -1,10 +1,10 @@
-import { classroomio, getApiHeaders, type InferResponseType } from '$lib/utils/services/api';
+import { gurukulx, getApiHeaders, type InferResponseType } from '$lib/utils/services/api';
 import { safeServerApi } from '$lib/utils/services/api/server';
 
-type GetOrganizationCoursesRequest = typeof classroomio.organization.courses.$get;
+type GetOrganizationCoursesRequest = typeof gurukulx.organization.courses.$get;
 type GetOrganizationCoursesSuccess = Extract<InferResponseType<GetOrganizationCoursesRequest>, { success: true }>;
 
-type GetProgramsRequest = typeof classroomio.program.$get;
+type GetProgramsRequest = typeof gurukulx.program.$get;
 type GetProgramsSuccess = Extract<InferResponseType<GetProgramsRequest>, { success: true }>;
 
 export const load = async ({ parent, cookies }) => {
@@ -19,10 +19,10 @@ export const load = async ({ parent, cookies }) => {
 
   const [coursesResult, programsResult] = await Promise.all([
     safeServerApi<GetOrganizationCoursesSuccess>(() =>
-      classroomio.organization.courses.$get({ query: {} }, getApiHeaders(cookies, orgId))
+      gurukulx.organization.courses.$get({ query: {} }, getApiHeaders(cookies, orgId))
     ),
     safeServerApi<GetProgramsSuccess>(() =>
-      classroomio.program.$get({ query: { organizationId: orgId } }, getApiHeaders(cookies, orgId))
+      gurukulx.program.$get({ query: { organizationId: orgId } }, getApiHeaders(cookies, orgId))
     )
   ]);
 

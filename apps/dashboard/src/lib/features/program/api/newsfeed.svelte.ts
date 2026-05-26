@@ -1,4 +1,4 @@
-import { BaseApiWithErrors, classroomio } from '$lib/utils/services/api';
+import { BaseApiWithErrors, gurukulx } from '$lib/utils/services/api';
 import type {
   CreateProgramNewsfeedCommentRequest,
   CreateProgramNewsfeedRequest,
@@ -55,7 +55,7 @@ export class ProgramNewsfeedApi extends BaseApiWithErrors {
   async list(programId: string) {
     await this.execute<ListProgramNewsfeedRequest>({
       requestFn: () =>
-        classroomio.program[':programId'].newsfeed.$get({
+        gurukulx.program[':programId'].newsfeed.$get({
           param: { programId },
           query: {}
         }),
@@ -89,7 +89,7 @@ export class ProgramNewsfeedApi extends BaseApiWithErrors {
 
     await this.execute<CreateProgramNewsfeedRequest>({
       requestFn: () =>
-        classroomio.program[':programId'].newsfeed.$post({
+        gurukulx.program[':programId'].newsfeed.$post({
           param: { programId },
           json: fields
         }),
@@ -127,7 +127,7 @@ export class ProgramNewsfeedApi extends BaseApiWithErrors {
 
     await this.execute<UpdateProgramNewsfeedRequest>({
       requestFn: () =>
-        classroomio.program[':programId'].newsfeed[':feedId'].$put({
+        gurukulx.program[':programId'].newsfeed[':feedId'].$put({
           param: { programId, feedId },
           json: fields
         }),
@@ -164,7 +164,7 @@ export class ProgramNewsfeedApi extends BaseApiWithErrors {
 
     await this.execute<ReactToProgramNewsfeedRequest>({
       requestFn: () =>
-        classroomio.program[':programId'].newsfeed[':feedId'].react.$put({
+        gurukulx.program[':programId'].newsfeed[':feedId'].react.$put({
           param: { programId, feedId },
           json: validationResult.data
         }),
@@ -195,7 +195,7 @@ export class ProgramNewsfeedApi extends BaseApiWithErrors {
   async delete(programId: string, feedId: string) {
     await this.execute<DeleteProgramNewsfeedRequest>({
       requestFn: () =>
-        classroomio.program[':programId'].newsfeed[':feedId'].$delete({
+        gurukulx.program[':programId'].newsfeed[':feedId'].$delete({
           param: { programId, feedId }
         }),
       logContext: 'deleting program newsfeed',
@@ -234,7 +234,7 @@ export class ProgramNewsfeedApi extends BaseApiWithErrors {
 
     await this.execute<GetProgramNewsfeedCommentsRequest>({
       requestFn: () =>
-        classroomio.program[':programId'].newsfeed[':feedId'].comments.$get({
+        gurukulx.program[':programId'].newsfeed[':feedId'].comments.$get({
           param: { programId, feedId }
         }),
       logContext: 'fetching program newsfeed comments',
@@ -270,7 +270,7 @@ export class ProgramNewsfeedApi extends BaseApiWithErrors {
 
     await this.execute<CreateProgramNewsfeedCommentRequest>({
       requestFn: () =>
-        classroomio.program[':programId'].newsfeed[':feedId'].comment.$post({
+        gurukulx.program[':programId'].newsfeed[':feedId'].comment.$post({
           param: { programId, feedId },
           json: { content }
         }),
@@ -311,7 +311,7 @@ export class ProgramNewsfeedApi extends BaseApiWithErrors {
   async deleteComment(programId: string, feedId: string, commentId: string) {
     await this.execute<DeleteProgramNewsfeedCommentRequest>({
       requestFn: () =>
-        classroomio.program[':programId'].newsfeed[':feedId'].comment[':commentId'].$delete({
+        gurukulx.program[':programId'].newsfeed[':feedId'].comment[':commentId'].$delete({
           param: { programId, feedId, commentId }
         }),
       logContext: 'deleting program newsfeed comment',

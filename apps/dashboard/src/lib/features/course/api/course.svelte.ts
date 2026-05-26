@@ -1,4 +1,4 @@
-import { BaseApiWithErrors, classroomio } from '$lib/utils/services/api';
+import { BaseApiWithErrors, gurukulx } from '$lib/utils/services/api';
 
 import type {
   Course,
@@ -205,7 +205,7 @@ export class CourseApi extends BaseApiWithErrors {
   async get(courseId: string) {
     await this.execute<GetCourseRequest>({
       requestFn: () =>
-        classroomio.course[':courseId'].$get({
+        gurukulx.course[':courseId'].$get({
           param: { courseId },
           query: {}
         }),
@@ -297,7 +297,7 @@ export class CourseApi extends BaseApiWithErrors {
   async enroll(courseId: string, body: { inviteToken?: string } = {}) {
     return this.execute<EnrollCourseRequest>({
       requestFn: () =>
-        classroomio.course[':courseId'].enroll.$post({
+        gurukulx.course[':courseId'].enroll.$post({
           param: { courseId },
           json: body
         }),
@@ -324,7 +324,7 @@ export class CourseApi extends BaseApiWithErrors {
   async getBySlug(slug: string) {
     await this.execute<GetCourseBySlugRequest>({
       requestFn: () =>
-        classroomio.course.slug?.[':slug'].$get({
+        gurukulx.course.slug?.[':slug'].$get({
           param: { slug }
         }),
       logContext: 'fetching course by slug',
@@ -374,7 +374,7 @@ export class CourseApi extends BaseApiWithErrors {
 
     await this.execute<CreateCourseRequest>({
       requestFn: () =>
-        classroomio.course.$post({
+        gurukulx.course.$post({
           json: result.data
         }),
       logContext: 'creating course',
@@ -444,7 +444,7 @@ export class CourseApi extends BaseApiWithErrors {
 
     const response = await this.execute<UpdateCourseRequest>({
       requestFn: () =>
-        classroomio.course[':courseId'].$put({
+        gurukulx.course[':courseId'].$put({
           param: { courseId },
           json: result.data
         }),
@@ -502,7 +502,7 @@ export class CourseApi extends BaseApiWithErrors {
   async delete(courseId: string) {
     await this.execute<DeleteCourseRequest>({
       requestFn: () =>
-        classroomio.course[':courseId'].$delete({
+        gurukulx.course[':courseId'].$delete({
           param: { courseId }
         }),
       logContext: 'deleting course',
@@ -531,7 +531,7 @@ export class CourseApi extends BaseApiWithErrors {
   async getProgress(courseId: string, profileId: string) {
     return this.execute<GetCourseProgressRequest>({
       requestFn: () =>
-        classroomio.course[':courseId']['progress'].$get({
+        gurukulx.course[':courseId']['progress'].$get({
           param: { courseId },
           query: { profileId }
         }),
@@ -553,7 +553,7 @@ export class CourseApi extends BaseApiWithErrors {
   async getCertificationEvaluation(courseId: string) {
     return this.execute<GetCertificationEvaluationRequest>({
       requestFn: () =>
-        classroomio.course[':courseId']['certification-evaluation'].$get({
+        gurukulx.course[':courseId']['certification-evaluation'].$get({
           param: { courseId }
         }),
       logContext: 'fetching certification evaluation',
@@ -579,7 +579,7 @@ export class CourseApi extends BaseApiWithErrors {
   async getAnalytics(courseId: string) {
     await this.execute<GetCourseAnalyticsRequest>({
       requestFn: () =>
-        classroomio.course[':courseId']['analytics'].$get({
+        gurukulx.course[':courseId']['analytics'].$get({
           param: { courseId }
         }),
       logContext: 'fetching course analytics',
@@ -731,7 +731,7 @@ export class CourseApi extends BaseApiWithErrors {
   async createPaymentRequest(courseId: string, studentEmail: string, studentFullname: string) {
     return this.execute<CreatePaymentRequestRequest>({
       requestFn: () =>
-        classroomio.course[':courseId']['payment-request']['$post']({
+        gurukulx.course[':courseId']['payment-request']['$post']({
           param: { courseId },
           json: {
             studentEmail,

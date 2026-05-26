@@ -1,4 +1,4 @@
-import { BaseApiWithErrors, classroomio } from '$lib/utils/services/api';
+import { BaseApiWithErrors, gurukulx } from '$lib/utils/services/api';
 import type { Program, ProgramDetail, ProgramMember, ProgramCourse, ProgramNewsfeed } from '../utils/types';
 import type {
   TCreateProgram,
@@ -38,8 +38,8 @@ class ProgramApi extends BaseApiWithErrors {
     const org = get(currentOrg);
     if (!org.id) return;
 
-    await this.execute<typeof classroomio.program.$get>({
-      requestFn: () => classroomio.program.$get({ query: { organizationId: org.id } }),
+    await this.execute<typeof gurukulx.program.$get>({
+      requestFn: () => gurukulx.program.$get({ query: { organizationId: org.id } }),
       onSuccess: (data) => {
         this.programs = data.data;
       },
@@ -50,8 +50,8 @@ class ProgramApi extends BaseApiWithErrors {
   async getProgram(programId: string, force = false) {
     if (!force && this.loadedProgramId === programId) return;
 
-    await this.execute<(typeof classroomio.program)[':programId']['$get']>({
-      requestFn: () => classroomio.program[':programId'].$get({ param: { programId } }),
+    await this.execute<(typeof gurukulx.program)[':programId']['$get']>({
+      requestFn: () => gurukulx.program[':programId'].$get({ param: { programId } }),
       onSuccess: (data) => {
         this.program = data.data;
         this.loadedProgramId = programId;
@@ -108,9 +108,9 @@ class ProgramApi extends BaseApiWithErrors {
     const org = get(currentOrg);
     if (!org.id) return;
 
-    await this.execute<typeof classroomio.program.$post>({
+    await this.execute<typeof gurukulx.program.$post>({
       requestFn: () =>
-        classroomio.program.$post({
+        gurukulx.program.$post({
           json: { ...data, organizationId: org.id }
         }),
       onSuccess: (res) => {
@@ -122,8 +122,8 @@ class ProgramApi extends BaseApiWithErrors {
   }
 
   async updateProgram(programId: string, data: TUpdateProgram) {
-    await this.execute<(typeof classroomio.program)[':programId']['$put']>({
-      requestFn: () => classroomio.program[':programId'].$put({ param: { programId }, json: data }),
+    await this.execute<(typeof gurukulx.program)[':programId']['$put']>({
+      requestFn: () => gurukulx.program[':programId'].$put({ param: { programId }, json: data }),
       onSuccess: (res) => {
         this.program = res.data;
         this.programs = this.programs.map((p) => (p.id === programId ? { ...p, ...res.data } : p));
@@ -138,8 +138,8 @@ class ProgramApi extends BaseApiWithErrors {
   }
 
   async deleteProgram(programId: string) {
-    await this.execute<(typeof classroomio.program)[':programId']['$delete']>({
-      requestFn: () => classroomio.program[':programId'].$delete({ param: { programId } }),
+    await this.execute<(typeof gurukulx.program)[':programId']['$delete']>({
+      requestFn: () => gurukulx.program[':programId'].$delete({ param: { programId } }),
       onSuccess: () => {
         this.programs = this.programs.filter((p) => p.id !== programId);
         snackbar.success(t.get('programs.delete_success') || 'Program deleted');
@@ -153,8 +153,8 @@ class ProgramApi extends BaseApiWithErrors {
   async listMembers(programId: string, force = false) {
     if (!force && this.loadedMembersProgramId === programId) return;
 
-    await this.execute<(typeof classroomio.program)[':programId']['members']['$get']>({
-      requestFn: () => classroomio.program[':programId'].members.$get({ param: { programId } }),
+    await this.execute<(typeof gurukulx.program)[':programId']['members']['$get']>({
+      requestFn: () => gurukulx.program[':programId'].members.$get({ param: { programId } }),
       onSuccess: (data) => {
         this.members = data.data;
         this.loadedMembersProgramId = programId;
@@ -164,8 +164,8 @@ class ProgramApi extends BaseApiWithErrors {
   }
 
   async addMembers(programId: string, data: TAddProgramMembers) {
-    await this.execute<(typeof classroomio.program)[':programId']['members']['$post']>({
-      requestFn: () => classroomio.program[':programId'].members.$post({ param: { programId }, json: data }),
+    await this.execute<(typeof gurukulx.program)[':programId']['members']['$post']>({
+      requestFn: () => gurukulx.program[':programId'].members.$post({ param: { programId }, json: data }),
       onSuccess: async () => {
         await this.listMembers(programId, true);
         snackbar.success(t.get('programs.members_added') || 'Members added');
@@ -175,9 +175,9 @@ class ProgramApi extends BaseApiWithErrors {
   }
 
   async updateMember(programId: string, memberId: string, data: TUpdateProgramMember) {
-    await this.execute<(typeof classroomio.program)[':programId']['members'][':memberId']['$put']>({
+    await this.execute<(typeof gurukulx.program)[':programId']['members'][':memberId']['$put']>({
       requestFn: () =>
-        classroomio.program[':programId'].members[':memberId'].$put({
+        gurukulx.program[':programId'].members[':memberId'].$put({
           param: { programId, memberId },
           json: data
         }),
@@ -189,9 +189,9 @@ class ProgramApi extends BaseApiWithErrors {
   }
 
   async removeMember(programId: string, memberId: string) {
-    await this.execute<(typeof classroomio.program)[':programId']['members'][':memberId']['$delete']>({
+    await this.execute<(typeof gurukulx.program)[':programId']['members'][':memberId']['$delete']>({
       requestFn: () =>
-        classroomio.program[':programId'].members[':memberId'].$delete({
+        gurukulx.program[':programId'].members[':memberId'].$delete({
           param: { programId, memberId }
         }),
       onSuccess: () => {
@@ -215,8 +215,8 @@ class ProgramApi extends BaseApiWithErrors {
       return;
     }
 
-    await this.execute<(typeof classroomio.program)[':programId']['courses']['$get']>({
-      requestFn: () => classroomio.program[':programId'].courses.$get({ param: { programId } }),
+    await this.execute<(typeof gurukulx.program)[':programId']['courses']['$get']>({
+      requestFn: () => gurukulx.program[':programId'].courses.$get({ param: { programId } }),
       onSuccess: (data) => {
         this.courses = data.data;
         this.syncProgramCourseCount(programId, data.data.length);
@@ -228,8 +228,8 @@ class ProgramApi extends BaseApiWithErrors {
   }
 
   async addCourse(programId: string, data: TAddCourseToProgram) {
-    await this.execute<(typeof classroomio.program)[':programId']['courses']['$post']>({
-      requestFn: () => classroomio.program[':programId'].courses.$post({ param: { programId }, json: data }),
+    await this.execute<(typeof gurukulx.program)[':programId']['courses']['$post']>({
+      requestFn: () => gurukulx.program[':programId'].courses.$post({ param: { programId }, json: data }),
       onSuccess: async () => {
         await this.listCourses(programId, true);
         this.syncProgramCourseCount(programId, this.courses.length);
@@ -250,7 +250,7 @@ class ProgramApi extends BaseApiWithErrors {
 
     try {
       for (const courseId of courseIds) {
-        const response = await classroomio.program[':programId'].courses.$post({
+        const response = await gurukulx.program[':programId'].courses.$post({
           param: { programId },
           json: { courseId }
         });
@@ -283,9 +283,9 @@ class ProgramApi extends BaseApiWithErrors {
   }
 
   async removeCourse(programId: string, courseId: string) {
-    await this.execute<(typeof classroomio.program)[':programId']['courses'][':courseId']['$delete']>({
+    await this.execute<(typeof gurukulx.program)[':programId']['courses'][':courseId']['$delete']>({
       requestFn: () =>
-        classroomio.program[':programId'].courses[':courseId'].$delete({
+        gurukulx.program[':programId'].courses[':courseId'].$delete({
           param: { programId, courseId }
         }),
       onSuccess: () => {
@@ -307,8 +307,8 @@ class ProgramApi extends BaseApiWithErrors {
   async inviteStudentsToProgram(programId: string, data: TInviteStudentsToProgram): Promise<boolean> {
     let ok = false;
 
-    await this.execute<(typeof classroomio.program)[':programId']['invite']['$post']>({
-      requestFn: () => classroomio.program[':programId'].invite.$post({ param: { programId }, json: data }),
+    await this.execute<(typeof gurukulx.program)[':programId']['invite']['$post']>({
+      requestFn: () => gurukulx.program[':programId'].invite.$post({ param: { programId }, json: data }),
       onSuccess: async () => {
         await this.listMembers(programId, true);
         snackbar.success(t.get('programs.invite_sent') || 'Invites sent');
@@ -328,8 +328,8 @@ class ProgramApi extends BaseApiWithErrors {
   async assignExistingStudentsToProgram(programId: string, data: TAssignExistingStudentsToProgram): Promise<boolean> {
     let ok = false;
 
-    await this.execute<(typeof classroomio.program)[':programId']['invite']['assign']['$post']>({
-      requestFn: () => classroomio.program[':programId'].invite.assign.$post({ param: { programId }, json: data }),
+    await this.execute<(typeof gurukulx.program)[':programId']['invite']['assign']['$post']>({
+      requestFn: () => gurukulx.program[':programId'].invite.assign.$post({ param: { programId }, json: data }),
       onSuccess: async () => {
         await this.listMembers(programId, true);
         snackbar.success(t.get('programs.members_added') || 'Members added');
@@ -346,9 +346,9 @@ class ProgramApi extends BaseApiWithErrors {
   async listNewsfeed(programId: string, force = false, cursor?: string) {
     if (!force && this.loadedNewsfeedProgramId === programId) return;
 
-    await this.execute<(typeof classroomio.program)[':programId']['newsfeed']['$get']>({
+    await this.execute<(typeof gurukulx.program)[':programId']['newsfeed']['$get']>({
       requestFn: () =>
-        classroomio.program[':programId'].newsfeed.$get({
+        gurukulx.program[':programId'].newsfeed.$get({
           param: { programId },
           query: { limit: '10', ...(cursor ? { cursor } : {}) }
         }),
@@ -363,8 +363,8 @@ class ProgramApi extends BaseApiWithErrors {
   // LMS — enrolled programs
 
   async listEnrolledPrograms() {
-    await this.execute<typeof classroomio.program.enrolled.$get>({
-      requestFn: () => classroomio.program.enrolled.$get({}),
+    await this.execute<typeof gurukulx.program.enrolled.$get>({
+      requestFn: () => gurukulx.program.enrolled.$get({}),
       onSuccess: (data) => {
         this.programs = data.data;
       },

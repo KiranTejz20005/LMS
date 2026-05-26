@@ -32,7 +32,7 @@
 </script>
 
 <svelte:head>
-  <title>{programApi.program?.name || 'Program'} - ClassroomIO</title>
+  <title>{programApi.program?.name || 'Program'} - GurukulX</title>
 </svelte:head>
 
 <Sidebar.Provider data-sveltekit-preload-data="off">

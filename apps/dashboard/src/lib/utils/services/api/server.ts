@@ -24,7 +24,7 @@ function getServerApiErrorMessage(error: unknown): string {
  *
  * @example
  * ```typescript
- * const response = await classroomio.organization.$get(
+ * const response = await gurukulx.organization.$get(
  *   { query: { siteName } },
  *   getApiKeyHeaders()
  * );

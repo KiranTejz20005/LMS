@@ -32,7 +32,7 @@ export const load = async ({ url, cookies, request, locals }): Promise<LoadOutpu
     org: orgSiteInfo.org,
     baseMetaTags: getBaseMetaTags(url, orgSiteInfo),
     serverLang: request.headers?.get('accept-language') || '',
-    localeCookie: cookies.get('classroomio_locale') || '',
+    localeCookie: cookies.get('gurukulx_locale') || '',
     locals
   };
 
@@ -43,7 +43,7 @@ export const load = async ({ url, cookies, request, locals }): Promise<LoadOutpu
 
   // If it isn't a registered dashboard domain and also not a valid sub domain.
   // if (!APP_SUBDOMAINS.includes(orgSiteInfo.subdomain) && !dev && !orgSiteInfo.isOrgSite) {
-  //   redirect(307, 'https://app.classroomio.com');
+  //   redirect(307, 'https://app.gurukulx.com');
   // }
 
   return response;

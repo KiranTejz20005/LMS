@@ -5,7 +5,7 @@
 </script>
 
 <svelte:head>
-  <title>Teams - ClassroomIO</title>
+  <title>Teams - GurukulX</title>
 </svelte:head>
 
 <Page.Header>

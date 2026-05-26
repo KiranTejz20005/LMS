@@ -1,4 +1,4 @@
-import { classroomio } from '$lib/utils/services/api';
+import { gurukulx } from '$lib/utils/services/api';
 import { generateVideoThumbnail } from './video-thumbnail-utils';
 
 export type VideoThumbnailUploadResult = { url: string; durationSeconds: number };
@@ -19,7 +19,7 @@ export class MediaUploader {
     const file = new File([thumbnailResult.blob], thumbnailFileName, { type: 'image/jpeg' });
 
     try {
-      const response = await classroomio.media.image.$post({ form: { file } });
+      const response = await gurukulx.media.image.$post({ form: { file } });
       const data = await response.json();
       if (!data.success || !data.url) return null;
       return {

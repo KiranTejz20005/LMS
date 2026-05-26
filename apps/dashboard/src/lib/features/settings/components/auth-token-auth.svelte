@@ -53,7 +53,7 @@
 async function openCourseInLMS() {
   // Secret generated above
   const secret = process.env.TOKEN_AUTH_SECRET;
-  const baseUrl = 'https://api.classroomio.dev';
+  const baseUrl = 'https://api.gurukulx.dev';
 
   const token = await new SignJWT({
     sub: 'test-user-123',
