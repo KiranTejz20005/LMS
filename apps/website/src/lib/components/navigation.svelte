@@ -99,7 +99,7 @@
       key: 'self-hosting',
       title: 'Self-hosting & Docs',
       subtitle: 'Run GurukulX in your own VPC.',
-      href: 'https://gurukulx.com/docs'
+      href: 'https://app-gurukulx.vercel.app'
     },
     {
       key: 'mcp-recipes',

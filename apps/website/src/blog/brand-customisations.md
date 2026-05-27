@@ -21,7 +21,7 @@ We are excited to announce more customisations coming into our learning manageme
 
 ## Your Student Dashboard
 
-Firstly let me quickly break down what we mean when we say _YOUR STUDENT DASHBOARD._ As an organisation or educator when you sign up on [gurukulx.com](https://gurukulx.com), you'd have to first create your organisation and then create your first course. This whole process is done within the admin dashboard - [app.gurukulx.com](https://app.gurukulx.com).
+Firstly let me quickly break down what we mean when we say _YOUR STUDENT DASHBOARD._ As an organisation or educator when you sign up on [gurukulx.com](https://gurukulx.com), you'd have to first create your organisation and then create your first course. This whole process is done within the admin dashboard - [app.gurukulx.com](https://app-gurukulx.vercel.app).
 
 ![gurukulx-courses-page](https://brand.cdn.clsrio.com/gurukulx-courses.png)
 _The admin dashboard - app.gurukulx.com_
@@ -59,7 +59,7 @@ With the above foundation I already laid out, I will like to share some of the n
 ![gurukulx-customise-lms-in-admin](https://brand.cdn.clsrio.com/customise-lms.png)
 _Customise LMS settings in admin dashboard_
 
-You can now go into your [settings page](https://app.gurukulx.com/org/*/settings/customize-lms) and now disable the features within the student dashboard you don't need. For example, if you run a certificate program and you don't want students talking to other students rather you only need the students to take the course and then take tests - thanks to this feature you can now achieve that.
+You can now go into your [settings page](https://app-gurukulx.vercel.app/org/*/settings/customize-lms) and now disable the features within the student dashboard you don't need. For example, if you run a certificate program and you don't want students talking to other students rather you only need the students to take the course and then take tests - thanks to this feature you can now achieve that.
 
 Any setting you disable within your dashboard will be reflected in your student dashboard on refresh.
 
