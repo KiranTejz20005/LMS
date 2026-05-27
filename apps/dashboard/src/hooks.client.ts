@@ -17,4 +17,5 @@ if (dsn && !dev && !isSelfHosted) {
   });
 }
 
+export const init = () => {};
 export const handleError = handleErrorWithSentry();
