@@ -34,16 +34,16 @@ export interface AgentModelDescriptor {
 export const AGENT_MODELS: Record<AgentModelId, AgentModelDescriptor> = {
   'groq-llama-3.3-70b': {
     provider: 'groq',
-    label: 'Llama 3.3 70B (Groq)',
-    backendModelId: 'llama-3.3-70b-versatile',
+    label: 'Llama 3.1 8B (Groq)',
+    backendModelId: 'llama-3.1-8b-instant',
     isFree: true,
     costTier: 'low',
     contextWindow: 128_000
   },
   'nvidia-llama-3.1-70b': {
     provider: 'nvidia',
-    label: 'Llama 3.1 70B (NVIDIA)',
-    backendModelId: 'meta/llama-3.1-70b-instruct',
+    label: 'Llama 3.1 8B (NVIDIA)',
+    backendModelId: 'meta/llama-3.1-8b-instruct',
     isFree: true,
     costTier: 'low',
     contextWindow: 128_000

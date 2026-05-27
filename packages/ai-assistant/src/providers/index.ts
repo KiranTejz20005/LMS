@@ -10,8 +10,8 @@ const DEFAULT_MODELS: Record<AIProvider, string> = {
   [AIProvider.ANTHROPIC]: 'claude-sonnet-4-20250514',
   [AIProvider.GOOGLE]: 'gemini-3.1-flash-lite',
   [AIProvider.MOONSHOT]: 'kimi-k2.6',
-  [AIProvider.GROQ]: 'llama-3.3-70b-versatile',
-  [AIProvider.NVIDIA]: 'meta/llama-3.1-70b-instruct'
+  [AIProvider.GROQ]: 'llama-3.1-8b-instant',
+  [AIProvider.NVIDIA]: 'meta/llama-3.1-8b-instruct'
 };
 
 const PROVIDER_API_KEY_ENV: Record<AIProvider, string> = {
@@ -99,4 +99,26 @@ export function pickAnyConfiguredProvider(): AIProviderConfig | null {
   }
 
   return null;
+}
+
+/**
+ * Returns all configured providers in preference order.
+ * Used for fallback — if one fails, try the next.
+ */
+export function getAllConfiguredProviders(): AIProviderConfig[] {
+  const order: AIProvider[] = [
+    AIProvider.GROQ,
+    AIProvider.NVIDIA,
+    AIProvider.GOOGLE,
+    AIProvider.OPENAI,
+    AIProvider.ANTHROPIC,
+    AIProvider.MOONSHOT
+  ];
+
+  const configs: AIProviderConfig[] = [];
+  for (const provider of order) {
+    const config = getProviderConfigForProvider(provider);
+    if (config) configs.push(config);
+  }
+  return configs;
 }

@@ -702,13 +702,19 @@ export class LessonApi extends BaseApiWithErrors {
     const videos = Array.isArray(this.lesson.videos) ? [...this.lesson.videos] : [];
     const removedVideo = videos[videoIndex] as { assetId?: string } | undefined;
 
+    // Try to detach from asset system, but don't block if it fails
+    // (video might have been added via URL without an asset record)
     if (removedVideo?.assetId && this.lesson.id) {
-      await mediaApi.detachAsset(removedVideo.assetId, {
-        targetType: 'lesson',
-        targetId: this.lesson.id,
-        slotType: 'lesson_video',
-        position: videoIndex
-      });
+      try {
+        await mediaApi.detachAsset(removedVideo.assetId, {
+          targetType: 'lesson',
+          targetId: this.lesson.id,
+          slotType: 'lesson_video',
+          position: videoIndex
+        });
+      } catch {
+        // Ignore detach errors — video will still be removed from lesson
+      }
     }
 
     this.lesson = {
@@ -727,13 +733,18 @@ export class LessonApi extends BaseApiWithErrors {
     const documents = Array.isArray(this.lesson.documents) ? [...this.lesson.documents] : [];
     const removedDocument = documents[documentIndex] as { assetId?: string } | undefined;
 
+    // Try to detach from asset system, but don't block if it fails
     if (removedDocument?.assetId && this.lesson.id) {
-      await mediaApi.detachAsset(removedDocument.assetId, {
-        targetType: 'lesson',
-        targetId: this.lesson.id,
-        slotType: 'lesson_document',
-        position: documentIndex
-      });
+      try {
+        await mediaApi.detachAsset(removedDocument.assetId, {
+          targetType: 'lesson',
+          targetId: this.lesson.id,
+          slotType: 'lesson_document',
+          position: documentIndex
+        });
+      } catch {
+        // Ignore detach errors — document will still be removed from lesson
+      }
     }
 
     this.lesson = {

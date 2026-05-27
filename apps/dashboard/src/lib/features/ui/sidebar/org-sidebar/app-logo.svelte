@@ -26,9 +26,7 @@
           rel="noopener noreferrer"
           {...props}
         >
-          <div class="flex size-6 items-center justify-center rounded-md bg-gradient-to-br from-indigo-500 to-purple-600">
-            <img src="/logo-192.png" alt="GurukulX logo" class="h-4 w-4" />
-          </div>
+          <img src="/logo-192.png" alt="GurukulX logo" class="h-6 w-6 rounded-md" />
 
           <span class="truncate font-semibold">GurukulX</span>
           <Badge variant="outline" class="capitalize">

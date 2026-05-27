@@ -247,7 +247,7 @@ export class MediaApi extends BaseApiWithErrors {
         success = true;
       },
       onError: () => {
-        snackbar.error('snackbar.media_manager.detach_failed');
+        // Silently fail — asset might not have a usage record
       }
     });
 

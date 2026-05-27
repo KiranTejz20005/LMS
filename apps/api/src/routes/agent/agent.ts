@@ -397,13 +397,19 @@ const agentCoreRouter = new Hono()
       const modelId =
         role === AgentRole.STUDENT ? DEFAULT_PICKER_MODEL_ID : (requestedModel ?? DEFAULT_PICKER_MODEL_ID);
       const modelDescriptor = AGENT_MODELS[modelId];
-      const baseProviderConfig = getProviderConfigForProvider(modelDescriptor.provider as AIProvider);
+      let baseProviderConfig = getProviderConfigForProvider(modelDescriptor.provider as AIProvider);
+
+      // Fallback: if the selected model's provider isn't configured, use any available provider
+      if (!baseProviderConfig) {
+        baseProviderConfig = pickAnyConfiguredProvider();
+      }
 
       if (!baseProviderConfig) {
         throw new AppError(`AI assistant is not configured for model "${modelId}"`, 'AI_NOT_CONFIGURED', 503);
       }
 
-      const providerConfig = { ...baseProviderConfig, model: modelDescriptor.backendModelId };
+      // Always use a small model to avoid "request too large" errors on free tiers
+      const providerConfig = { ...baseProviderConfig };
 
       const [courseRow] = await db
         .select({

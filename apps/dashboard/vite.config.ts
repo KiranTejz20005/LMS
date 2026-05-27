@@ -17,6 +17,9 @@ export default ({ mode }) => {
     plugins: [sveltekit()],
     server: {
       ...getServer(process.env),
+      fs: {
+        allow: ['../..']
+      },
       watch: {
         ignored: ['**/node_modules/!(@cio)/**', '**/.git/**']
       }
