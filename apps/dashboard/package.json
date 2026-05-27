@@ -93,7 +93,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=20.19.3"
+    "node": "20.x"
   },
   "browser": {
     "crypto": false
