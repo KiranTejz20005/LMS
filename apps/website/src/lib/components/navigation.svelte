@@ -150,53 +150,24 @@
 
   const navItems: NavItem[] = [
     {
-      key: 'solutions',
-      title: 'Solutions',
-      href: '/',
-      items: solutions
-    },
-    {
-      key: 'developers',
-      title: 'Developers',
-      href: '/automation',
-      items: developers
-    },
-    {
-      key: 'free-tools',
-      title: 'Free Tools',
-      href: '/tools',
-      items: freeTools
-    },
-    {
-      key: 'blog',
-      title: 'Blog',
-      href: '/blog'
+      key: 'features',
+      title: 'Features',
+      href: '/#features'
     },
     {
       key: 'pricing',
       title: 'Pricing',
       href: '/pricing'
+    },
+    {
+      key: 'blog',
+      title: 'Blog',
+      href: '/blog'
     }
   ];
 
-  let isSolutionsActive = $derived(!!solutions.some((s) => activeLink.includes(s.key)));
-  let isDevelopersActive = $derived(!!developers.some((d) => activeLink.includes(d.key)));
-  let isFreeToolsActive = $derived(activeLink.startsWith('/tools'));
-
   function isNavItemActive(navItem: NavItem) {
-    if (navItem.key === 'solutions') {
-      return isSolutionsActive;
-    }
-
-    if (navItem.key === 'developers') {
-      return isDevelopersActive;
-    }
-
-    if (navItem.key === 'free-tools') {
-      return isFreeToolsActive;
-    }
-
-    return navItem.href ? activeLink.startsWith(navItem.href) : false;
+    return navItem.href ? activeLink.startsWith(navItem.href) && navItem.href !== '/' : false;
   }
 </script>
 
