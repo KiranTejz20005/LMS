@@ -10,6 +10,6 @@ export const load = ({ request, url }) => {
     event: 'signup'
   });
 
-  const baseUrl = dev ? 'http://localhost:5173' : 'https://app.gurukulx.com';
+  const baseUrl = dev ? 'http://localhost:5173' : 'https://app-gurukulx.vercel.app';
   redirect(307, `${baseUrl}/signup${url.search ?? ''}`);
 };

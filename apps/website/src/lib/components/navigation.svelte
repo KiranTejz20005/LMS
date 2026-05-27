@@ -23,7 +23,7 @@
 
   let { stars }: { stars: number } = $props();
 
-  const dashboardUrl = $derived(dev ? 'http://localhost:5173' : 'https://app.gurukulx.com');
+  const dashboardUrl = $derived(dev ? 'http://localhost:5173' : 'https://app-gurukulx.vercel.app');
 
   type ListItemProps = HTMLAttributes<HTMLAnchorElement> & {
     title: string;
