@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="apps/website/static/logo-512.png" alt="GurukulX Logo" width="80" />
   <h1>GurukulX</h1>
   <p><strong>AI-Powered Learning Management System</strong></p>
   <p>Create courses with AI, manage students, issue certificates, and run your academy — all from one platform.</p>
