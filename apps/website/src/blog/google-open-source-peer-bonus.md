@@ -29,7 +29,6 @@ I want to use this opportunity to thank [Ada Nduka Oyom](https://x.com/Kolokodes
 
 I received the award letter this week and the official blog post will be made on their website in the coming weeks.
 
-![bonus-letter](/blog/os-peer-bonus-award-letter-gurukulx.jpg)
 _OS Peer Bonus H1 2024 - Best Ibitoye-Rotimi - OSPB Award Letter_
 
 As regards the financial bonus, I have no idea how much Google is giving out to each person that was selected however we've been told to setup a Pionner account and in few days the payout will be made. Once I receive it, I will share exactly how much we received 😉.
