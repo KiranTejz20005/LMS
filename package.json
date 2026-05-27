@@ -3,7 +3,7 @@
   "version": "0.1.13",
   "scripts": {
     "build": "pnpm -r build",
-    "build:dashboard": "pnpm --filter=@cio/question-types run build && pnpm --filter=@cio/utils run build && pnpm --filter=@cio/email run build && pnpm --filter=@cio/db run build && pnpm --filter=@cio/certificates run build && pnpm --filter=@cio/ai-assistant run build && pnpm --filter=@cio/analytics run build && pnpm --filter=@cio/dashboard run build",
+    "build:dashboard": "pnpm --filter=@cio/question-types run build && pnpm --filter=@cio/utils run build && pnpm --filter=@cio/email run build && pnpm --filter=@cio/db run build && pnpm --filter=@cio/certificates run build && pnpm --filter=@cio/ai-assistant run build && pnpm --filter=@cio/analytics run build && pnpm --filter=@cio/api run build && pnpm --filter=@cio/dashboard run build",
     "build:website": "pnpm --filter=@cio/question-types run build && pnpm --filter=@cio/utils run build && pnpm --filter=@cio/certificates run build && pnpm --filter=@cio/website run build",
     "dev": "pnpm -r --parallel dev",
     "api:dev": "pnpm --filter @cio/api dev",
