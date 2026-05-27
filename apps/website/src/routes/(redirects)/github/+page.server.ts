@@ -9,5 +9,5 @@ export const load = async ({ request }) => {
     event: 'github page visited'
   });
 
-  redirect(307, 'https://github.com/rotimi-best/gurukulx');
+  redirect(307, 'https://github.com/KiranTejz20005/LMS');
 };

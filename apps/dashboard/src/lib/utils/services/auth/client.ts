@@ -23,10 +23,13 @@ function resolveBaseURL() {
   if (typeof window === 'undefined') {
     return env.PUBLIC_SERVER_URL || 'http://localhost:3002';
   }
-  if (env.PUBLIC_IS_SELFHOSTED === 'true' || dev) {
-    return env.PUBLIC_SERVER_URL || `${window.location.origin}/api/auth`;
+  // In production, proxy through the dashboard's own domain to keep cookies same-origin
+  // In dev, hit the API directly (same localhost, different port)
+  if (dev) {
+    return env.PUBLIC_SERVER_URL || 'http://localhost:3081';
   }
-  return `${window.location.origin}/proxy/api/auth`;
+  // Production: use same-origin proxy at /api/auth
+  return `${window.location.origin}/api/auth`;
 }
 
 const baseURL = resolveBaseURL();
