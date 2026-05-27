@@ -250,7 +250,7 @@
   </li>
 {/snippet}
 
-<section class="fixed top-0 z-50 w-full border-b bg-white">
+<section class="fixed top-0 z-50 w-full border-b border-gray-100 bg-white/90 backdrop-blur-md shadow-sm">
   <div class="mx-auto flex w-full items-center justify-between gap-20 px-4 py-1 lg:w-[90%] lg:px-0">
     <a href="/" class="w-[10%]">
       <div class="flex w-full items-center">

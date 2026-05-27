@@ -26,6 +26,7 @@
   const isEmailPrefilled = !!emailFromUrl;
   let fields = $state(Object.assign({}, SIGNUP_FIELDS, emailFromUrl ? { email: emailFromUrl } : {}));
   let loading = $state(false);
+  let redirecting = $state(false);
   let errors: {
     email?: string;
     password?: string;
@@ -147,6 +148,7 @@
             }
 
             const redirect = redirectUrl || '/';
+            redirecting = true;
             window.location.href = redirect.startsWith('/') ? redirect : `/?redirect=${encodeURIComponent(redirect)}`;
           }
         }
@@ -176,6 +178,13 @@
 <svelte:head>
   <title>Join GurukulX</title>
 </svelte:head>
+
+{#if redirecting}
+  <div class="fixed inset-0 z-[9999] flex flex-col items-center justify-center gap-4 bg-white dark:bg-neutral-900">
+    <div class="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-primary"></div>
+    <p class="text-sm text-gray-500">Setting up your account...</p>
+  </div>
+{/if}
 
 <SenjaEmbed id="aa054658-1e15-4d00-8920-91f424326c4e" />
 

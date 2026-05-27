@@ -79,12 +79,6 @@
   <div class="pointer-events-none absolute -right-32 bottom-20 h-[400px] w-[400px] rounded-full bg-purple-200/20 blur-[80px] animate-pulse" style="animation-delay: 1s;"></div>
 
   <div class="relative z-10 mx-auto flex max-w-[1100px] flex-col items-center text-center">
-    <!-- Badge -->
-    <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-sm text-amber-700">
-      <TrophyIcon size={14} />
-      <span>Built for Hackathon — AI-Powered LMS</span>
-    </div>
-
     <h1 class="max-w-[900px] text-[clamp(2.2rem,5vw,3.75rem)] leading-[1.08] font-bold tracking-tight text-gray-950">
       The Learning Platform That
       <span class="relative inline-block">
@@ -99,16 +93,12 @@
     </p>
 
     <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-      <a href="/signup">
-        <Button class="h-12 px-7 text-base">
-          Get Started Free
-          <ArrowRightIcon size={18} class="ml-2" />
-        </Button>
+      <a href="/signup" class="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-violet-600 px-7 text-base font-medium text-white shadow-lg transition-all hover:bg-violet-700 hover:shadow-xl">
+        Get Started Free
+        <ArrowRightIcon size={18} />
       </a>
-      <a href="#features">
-        <Button variant="outline" class="h-12 px-7 text-base">
-          Explore Features
-        </Button>
+      <a href="#features" class="inline-flex h-12 items-center justify-center gap-2 rounded-md border border-gray-300 bg-white px-7 text-base font-medium text-gray-700 transition-all hover:bg-gray-50 hover:border-gray-400">
+        Explore Features
       </a>
     </div>
 
@@ -241,11 +231,9 @@
           {/each}
         </ul>
         <div class="mt-8">
-          <a href="/signup">
-            <Button class="h-11 bg-violet-600 px-6 hover:bg-violet-700">
-              Try AI Course Builder
-              <ArrowRightIcon size={16} class="ml-2" />
-            </Button>
+          <a href="/signup" class="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-violet-600 px-6 text-sm font-medium text-white shadow-lg transition-all hover:bg-violet-700 hover:shadow-xl">
+            Try AI Course Builder
+            <ArrowRightIcon size={16} />
           </a>
         </div>
       </div>
@@ -311,11 +299,9 @@
       Start building courses, enrolling students, and issuing certificates today. No credit card required.
     </p>
     <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-      <a href="/signup">
-        <Button class="h-12 bg-white px-7 text-base text-violet-700 hover:bg-gray-100">
-          Start Building for Free
-          <RocketIcon size={16} class="ml-2" />
-        </Button>
+      <a href="/signup" class="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-white px-7 text-base font-medium text-violet-700 shadow-lg transition-all hover:bg-violet-50 hover:shadow-xl">
+        Start Building for Free
+        <RocketIcon size={16} />
       </a>
     </div>
   </div>

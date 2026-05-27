@@ -9,19 +9,23 @@ const DEFAULT_MODELS: Record<AIProvider, string> = {
   [AIProvider.OPENAI]: 'gpt-5.4-mini',
   [AIProvider.ANTHROPIC]: 'claude-sonnet-4-20250514',
   [AIProvider.GOOGLE]: 'gemini-3.1-flash-lite',
-  [AIProvider.MOONSHOT]: 'kimi-k2.6'
+  [AIProvider.MOONSHOT]: 'kimi-k2.6',
+  [AIProvider.GROQ]: 'llama-3.3-70b-versatile',
+  [AIProvider.NVIDIA]: 'meta/llama-3.1-70b-instruct'
 };
 
 const PROVIDER_API_KEY_ENV: Record<AIProvider, string> = {
   [AIProvider.OPENAI]: 'OPENAI_API_KEY',
   [AIProvider.ANTHROPIC]: 'ANTHROPIC_API_KEY',
   [AIProvider.GOOGLE]: 'GOOGLE_API_KEY',
-  [AIProvider.MOONSHOT]: 'MOONSHOT_API_KEY'
+  [AIProvider.MOONSHOT]: 'MOONSHOT_API_KEY',
+  [AIProvider.GROQ]: 'GROQ_API_KEY',
+  [AIProvider.NVIDIA]: 'NVIDIA_API_KEY'
 };
 
 /**
  * Creates an AI SDK LanguageModel from provider configuration.
- * Normalizes OpenAI, Anthropic, and Google into a single interface for streamText().
+ * Normalizes all providers into a single interface for streamText().
  */
 export function createModel(config: AIProviderConfig): LanguageModel {
   const modelName = config.model || DEFAULT_MODELS[config.provider];
@@ -43,6 +47,22 @@ export function createModel(config: AIProviderConfig): LanguageModel {
       const moonshot = createMoonshotAI({ apiKey: config.apiKey });
       return moonshot(modelName);
     }
+    case AIProvider.GROQ: {
+      // Groq uses OpenAI-compatible API
+      const groq = createOpenAI({
+        apiKey: config.apiKey,
+        baseURL: 'https://api.groq.com/openai/v1'
+      });
+      return groq(modelName);
+    }
+    case AIProvider.NVIDIA: {
+      // NVIDIA NIM uses OpenAI-compatible API
+      const nvidia = createOpenAI({
+        apiKey: config.apiKey,
+        baseURL: 'https://integrate.api.nvidia.com/v1'
+      });
+      return nvidia(modelName);
+    }
     default:
       throw new Error(`Unsupported AI provider: ${config.provider}`);
   }
@@ -61,10 +81,17 @@ export function getProviderConfigForProvider(provider: AIProvider): AIProviderCo
 
 /**
  * Returns the first provider that has a key configured, in preference order.
- * Used by routes that don't take an explicit model (status check, title generation).
+ * Groq and NVIDIA are preferred since they're free.
  */
 export function pickAnyConfiguredProvider(): AIProviderConfig | null {
-  const order: AIProvider[] = [AIProvider.GOOGLE, AIProvider.OPENAI, AIProvider.ANTHROPIC];
+  const order: AIProvider[] = [
+    AIProvider.GROQ,
+    AIProvider.NVIDIA,
+    AIProvider.GOOGLE,
+    AIProvider.OPENAI,
+    AIProvider.ANTHROPIC,
+    AIProvider.MOONSHOT
+  ];
 
   for (const provider of order) {
     const config = getProviderConfigForProvider(provider);

@@ -215,8 +215,9 @@
     position: fixed;
     top: 0;
     left: 0;
-    height: 3px;
+    height: 4px;
     transition: width 0.21s ease-in-out;
+    border-radius: 0 2px 2px 0;
   }
 
   .svelte-progress-bar-hiding {

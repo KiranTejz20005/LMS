@@ -99,19 +99,16 @@
       <div class="absolute inset-0 bg-black/45" aria-hidden="true"></div>
     </div>
   {:else}
-    <div class="absolute inset-0 z-0 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900"></div>
-    <div class="absolute inset-0 z-0 opacity-20" style="background-image: radial-gradient(circle at 25% 25%, rgba(99, 102, 241, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.2) 0%, transparent 50%);"></div>
+    <div class="absolute inset-0 z-0 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-neutral-900 dark:to-neutral-950"></div>
   {/if}
-  <Card.Root class="ui:w-full relative z-10 max-w-[420px] border-0 shadow-2xl backdrop-blur-sm">
+  <Card.Root class="ui:w-full relative z-10 max-w-[420px] shadow-xl">
     {#if !showOnlyContent || showLogo}
       <Card.Header class="ui:flex ui:flex-col ui:items-center ui:gap-4 ui:pb-2">
-        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
-          <img
-            src={$currentOrg.avatarUrl ? $currentOrg.avatarUrl : '/logo-192.png'}
-            alt={$currentOrg.name ? $currentOrg.name : 'GurukulX'}
-            class="h-8 w-8 rounded-lg"
-          />
-        </div>
+        <img
+          src={$currentOrg.avatarUrl ? $currentOrg.avatarUrl : '/logo-192.png'}
+          alt={$currentOrg.name ? $currentOrg.name : 'GurukulX'}
+          class="h-12 w-12 rounded-xl"
+        />
 
         {#if !showOnlyContent}
           <a href="/">

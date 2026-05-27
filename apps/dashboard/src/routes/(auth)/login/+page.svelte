@@ -25,6 +25,7 @@
 
   let submitError: string | undefined = $state();
   let loading = $state(false);
+  let redirecting = $state(false);
   let errors = $state(Object.assign({}, LOGIN_FIELDS));
   /** Per-email discovery result; display uses this over org-level when set */
   let discoveryState = $state<SsoAuthState | null>(null);
@@ -106,6 +107,7 @@
               });
             }
 
+            redirecting = true;
             const redirect = redirectUrl || '/';
             window.location.href = redirect.startsWith('/') ? redirect : `/?redirect=${encodeURIComponent(redirect)}`;
           }
@@ -126,6 +128,13 @@
 <svelte:head>
   <title>Welcome back to {$currentOrg.name || 'GurukulX'}</title>
 </svelte:head>
+
+{#if redirecting}
+  <div class="fixed inset-0 z-[9999] flex flex-col items-center justify-center gap-4 bg-white dark:bg-neutral-900">
+    <div class="h-10 w-10 animate-spin rounded-full border-4 border-gray-200 border-t-primary"></div>
+    <p class="text-sm text-gray-500">Signing you in...</p>
+  </div>
+{/if}
 
 {#snippet getPasswordAuthAlternative()}
   <!-- SSO Section (when SSO is available) -->

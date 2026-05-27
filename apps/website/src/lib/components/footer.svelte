@@ -58,7 +58,7 @@
     <div class="flex flex-col gap-4 lg:max-w-[220px]">
       <img width="32" height="32" loading="lazy" src="/logo-192.png" alt="GurukulX logo" />
       <p class="ui:text-muted-foreground text-sm leading-6">
-        The Open Source LMS for compliance training and certification programs.
+        AI-powered LMS for course creation, student management, and certification programs.
       </p>
       <div class="flex items-center gap-2">
         <a
@@ -93,110 +93,43 @@
       <div>
         <p class="ui:text-foreground mb-4 text-sm font-semibold">Product</p>
         <ul class="space-y-3">
-          <li>
-            <a href="/mcp-recipes" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors"
-              >MCP Recipes</a
-            >
-          </li>
-          <li>
-            <a href="/automation" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors"
-              >API & MCP</a
-            >
-          </li>
-          <li>
-            <a href="/pricing" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors"
-              >Pricing</a
-            >
-          </li>
+          <li><span class="ui:text-muted-foreground text-sm">Courses</span></li>
+          <li><span class="ui:text-muted-foreground text-sm">AI Course Builder</span></li>
+          <li><span class="ui:text-muted-foreground text-sm">Certificates</span></li>
+          <li><span class="ui:text-muted-foreground text-sm">Analytics</span></li>
         </ul>
       </div>
 
       <div>
         <p class="ui:text-foreground mb-4 text-sm font-semibold">Solutions</p>
         <ul class="space-y-3">
-          <li>
-            <a
-              href="/customer-education"
-              class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Customer Education</a
-            >
-          </li>
-          <li>
-            <a
-              href="/compliance-training"
-              class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Compliance Training</a
-            >
-          </li>
-          <li>
-            <a
-              href="/partner-training"
-              class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Partner Training</a
-            >
-          </li>
+          <li><span class="ui:text-muted-foreground text-sm">Customer Education</span></li>
+          <li><span class="ui:text-muted-foreground text-sm">Compliance Training</span></li>
+          <li><span class="ui:text-muted-foreground text-sm">Partner Training</span></li>
+          <li><span class="ui:text-muted-foreground text-sm">Employee Onboarding</span></li>
         </ul>
       </div>
 
       <div>
         <p class="ui:text-foreground mb-4 text-sm font-semibold">Resources</p>
         <ul class="space-y-3">
-          <li>
-            <a
-              href="/docs-vs-company-academy"
-              class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors"
-              >Docs vs Company Academy</a
-            >
-          </li>
-          <li>
-            <a href="/teach" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors"
-              >Teach with us</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://gurukulx.com/docs/"
-              target="_blank"
-              class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Help Center</a
-            >
-          </li>
-          <li>
-            <a
-              href="https://gurukulx.com/docs/quickstart/signup"
-              target="_blank"
-              class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Getting Started</a
-            >
-          </li>
-          <li>
-            <a href="/oss-friends" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors"
-              >OSS Friends</a
-            >
-          </li>
+          <li><span class="ui:text-muted-foreground text-sm">Documentation</span></li>
+          <li><span class="ui:text-muted-foreground text-sm">Help Center</span></li>
+          <li><span class="ui:text-muted-foreground text-sm">Blog</span></li>
+          <li><span class="ui:text-muted-foreground text-sm">Community</span></li>
         </ul>
       </div>
 
       <div>
-        <p class="ui:text-foreground mb-4 text-sm font-semibold">Company</p>
+        <p class="ui:text-foreground mb-4 text-sm font-semibold">Legal</p>
         <ul class="space-y-3">
           <li>
-            <a href="/roadmap" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors"
-              >Roadmap</a
-            >
+            <a href="/privacy" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Privacy Policy</a>
           </li>
           <li>
-            <a
-              href="mailto:help@gurukulx.com"
-              target="_blank"
-              class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Support</a
-            >
+            <a href="/tos" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors">Terms of Use</a>
           </li>
-          <li>
-            <a href="/privacy" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors"
-              >Privacy Policy</a
-            >
-          </li>
-          <li>
-            <a href="/tos" class="ui:text-muted-foreground ui:hover:text-foreground text-sm transition-colors"
-              >Terms of Use</a
-            >
-          </li>
+          <li><span class="ui:text-muted-foreground text-sm">Cookie Policy</span></li>
         </ul>
       </div>
     </nav>

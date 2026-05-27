@@ -3,14 +3,19 @@
  *
  * - `AGENT_MODELS` is the full set the backend supports.
  * - `UI_PICKER_MODEL_IDS` is the subset shown in the dashboard model picker.
- *   Anthropic stays in `AGENT_MODELS` so backend code paths keep working
- *   even though it isn't currently exposed to users.
  */
 
-export const AGENT_MODEL_IDS = ['gemini-3.1-flash-lite', 'gpt-5.4-mini', 'claude-sonnet-3-5', 'kimi-k2.6'] as const;
+export const AGENT_MODEL_IDS = [
+  'groq-llama-3.3-70b',
+  'nvidia-llama-3.1-70b',
+  'gemini-3.1-flash-lite',
+  'gpt-5.4-mini',
+  'claude-sonnet-3-5',
+  'kimi-k2.6'
+] as const;
 
 export type AgentModelId = (typeof AGENT_MODEL_IDS)[number];
-export type AgentModelProvider = 'google' | 'openai' | 'anthropic' | 'moonshot';
+export type AgentModelProvider = 'google' | 'openai' | 'anthropic' | 'moonshot' | 'groq' | 'nvidia';
 export type AgentModelCostTier = 'low' | 'high';
 
 export interface AgentModelDescriptor {
@@ -27,6 +32,22 @@ export interface AgentModelDescriptor {
 }
 
 export const AGENT_MODELS: Record<AgentModelId, AgentModelDescriptor> = {
+  'groq-llama-3.3-70b': {
+    provider: 'groq',
+    label: 'Llama 3.3 70B (Groq)',
+    backendModelId: 'llama-3.3-70b-versatile',
+    isFree: true,
+    costTier: 'low',
+    contextWindow: 128_000
+  },
+  'nvidia-llama-3.1-70b': {
+    provider: 'nvidia',
+    label: 'Llama 3.1 70B (NVIDIA)',
+    backendModelId: 'meta/llama-3.1-70b-instruct',
+    isFree: true,
+    costTier: 'low',
+    contextWindow: 128_000
+  },
   'gemini-3.1-flash-lite': {
     provider: 'google',
     label: 'Gemini 3.1 Flash Lite',
@@ -62,10 +83,12 @@ export const AGENT_MODELS: Record<AgentModelId, AgentModelDescriptor> = {
 };
 
 export const UI_PICKER_MODEL_IDS = [
-  'kimi-k2.6',
+  'groq-llama-3.3-70b',
+  'nvidia-llama-3.1-70b',
   'gemini-3.1-flash-lite',
+  'kimi-k2.6',
   'gpt-5.4-mini',
   'claude-sonnet-3-5'
 ] as const satisfies readonly AgentModelId[];
 
-export const DEFAULT_PICKER_MODEL_ID: AgentModelId = 'gemini-3.1-flash-lite';
+export const DEFAULT_PICKER_MODEL_ID: AgentModelId = 'groq-llama-3.3-70b';

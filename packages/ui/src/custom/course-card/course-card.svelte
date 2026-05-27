@@ -51,7 +51,7 @@
   const resolvedBannerImage = $derived(bannerImage?.trim() ? bannerImage : DEFAULT_COURSE_BANNER_IMAGE);
 </script>
 
-<Item.Root variant="outline" class={cn('ui:group ui:relative ui:max-w-[320px] ui:p-3!', className)}>
+<Item.Root variant="outline" class={cn('ui:group ui:relative ui:max-w-[320px] ui:p-3! ui:transition-all ui:duration-200 ui:hover:shadow-md ui:hover:border-primary/30 ui:hover:-translate-y-0.5', className)}>
   {#snippet child({ props })}
     {#if href}
       <a {href} {...props} class={cn('ui:block', props.class as string)}>

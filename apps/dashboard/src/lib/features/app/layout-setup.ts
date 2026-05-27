@@ -14,6 +14,10 @@ export interface OrgSiteInfo {
   orgSiteName: string;
 }
 
+// In-memory cache for self-hosted org (never changes at runtime)
+let cachedSelfHostedOrg: AccountOrg | null | undefined = undefined;
+let cachedOrgSiteName = '';
+
 export async function getOrgSiteInfo(url: URL, cookies: Cookies): Promise<OrgSiteInfo> {
   const response: OrgSiteInfo = {
     orgSiteName: '',
@@ -22,15 +26,25 @@ export async function getOrgSiteInfo(url: URL, cookies: Cookies): Promise<OrgSit
     org: null
   };
 
-  // Self-hosted: single org, single domain
+  // Self-hosted: single org, single domain — cache after first fetch
   if (PUBLIC_IS_SELFHOSTED === 'true') {
+    if (cachedSelfHostedOrg !== undefined) {
+      response.org = cachedSelfHostedOrg;
+      response.isOrgSite = !!cachedSelfHostedOrg;
+      response.orgSiteName = cachedOrgSiteName;
+      return response;
+    }
+
     const apiKeyHeaders = getApiKeyHeaders();
     const firstOrg = await getFirstOrg(apiKeyHeaders);
     if (firstOrg) {
-      response.org = firstOrg as AccountOrg;
+      cachedSelfHostedOrg = firstOrg as AccountOrg;
+      cachedOrgSiteName = firstOrg.siteName || '';
+      response.org = cachedSelfHostedOrg;
       response.isOrgSite = true;
-      response.orgSiteName = firstOrg.siteName || '';
-      response.subdomain = '';
+      response.orgSiteName = cachedOrgSiteName;
+    } else {
+      cachedSelfHostedOrg = null;
     }
 
     return response;

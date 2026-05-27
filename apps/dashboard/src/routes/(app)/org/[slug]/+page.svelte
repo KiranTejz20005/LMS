@@ -223,10 +223,14 @@
     </div>
   </div>
 {:else}
-  <div class="flex min-h-[90vh] items-center justify-center px-4 py-12">
+  <div class="flex min-h-[85vh] items-center justify-center px-4 py-12">
     <div class="w-full max-w-3xl">
+      <div class="mb-8 text-center">
+        <h1 class="text-3xl font-bold tracking-tight">{$t('course.creator.heading')}</h1>
+        <p class="ui:text-muted-foreground mt-2 text-sm">Describe your course idea and let AI build it for you</p>
+      </div>
       <CourseCreator
-        heading={$t('course.creator.heading')}
+        heading=""
         placeholder={$t('course.creator.placeholder')}
         bind:prompt={composerPrompt}
         model={selectedModel}

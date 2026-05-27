@@ -35,13 +35,20 @@ function ensureAnalyticsSessionCookie(cookies: Parameters<Handle>[0]['event']['c
 
 export const handle: Handle = async (args) => {
   const { event } = args;
-  const sessionData = await getSessionData(event.cookies);
+  const { pathname } = event.url;
 
-  if (sessionData) {
-    event.locals = sessionData;
+  // Skip session validation for public auth routes — they don't need it
+  // and it saves a round-trip to the API on every login/signup page load
+  const isAuthRoute = pathname.startsWith('/login') || pathname.startsWith('/signup') || pathname.startsWith('/forgot') || pathname.startsWith('/reset');
+
+  if (!isAuthRoute) {
+    const sessionData = await getSessionData(event.cookies);
+    if (sessionData) {
+      event.locals = sessionData;
+    }
   }
 
-  if (!event.url.pathname.includes('/api')) {
+  if (!pathname.includes('/api')) {
     ensureAnalyticsSessionCookie(event.cookies);
   }
 

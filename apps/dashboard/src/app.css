@@ -47,6 +47,33 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Global UI polish */
+[data-slot="card"] {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+
+[data-slot="card"]:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+[data-slot="button"] {
+  transition: all 0.15s ease;
+}
+
+[data-slot="sidebar-menu-button"] {
+  transition: all 0.15s ease;
+}
+
+/* Better visual hierarchy for page sections */
+[data-slot="page-body"] {
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 #calendar .grid {
   --sc-theme-calendar-colors-background-highlight: var(--main-primary-color);
 }
