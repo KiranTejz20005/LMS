@@ -53,8 +53,15 @@
   const isSessionReady = $derived(!$session.isPending && !$session.isRefetching && $session.data);
 
   // Use server-side session data immediately if available (avoids waiting for client-side API call)
-  let hasTriggeredSetup = false;
+  let hasTriggeredSetup = $state(false);
   $effect(() => {
+    if (hasTriggeredSetup && appInitApi.isInitializedAndReady) return;
+
+    // If a previous setup attempt failed, allow retry
+    if (hasTriggeredSetup && !appInitApi.isInitializedAndReady && !appInitApi.loading) {
+      hasTriggeredSetup = false;
+    }
+
     if (hasTriggeredSetup) return;
 
     // Try server-side locals first (instant, no API call needed)

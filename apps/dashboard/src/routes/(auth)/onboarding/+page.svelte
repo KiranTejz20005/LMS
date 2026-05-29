@@ -195,6 +195,16 @@
       </div>
     </div>
   </div>
+{:else}
+  <!-- Loading state while profile is being fetched -->
+  <div class="flex min-h-screen w-full items-center justify-center bg-gradient-to-br from-slate-50 to-indigo-50 dark:from-neutral-950 dark:to-indigo-950/20">
+    <div class="flex flex-col items-center gap-4">
+      <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 shadow-lg">
+        <img src="/logo-192.png" alt="GurukulX logo" height="28" width="28" class="rounded-md" />
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400">Loading...</p>
+    </div>
+  </div>
 {/if}
 
 <style>

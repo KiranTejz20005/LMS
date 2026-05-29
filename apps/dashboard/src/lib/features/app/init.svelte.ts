@@ -73,8 +73,20 @@ class AppInitApi extends BaseApi {
         this.setUserAnalytics();
         this.routeUserToNextPage(params);
       },
-      onError: () => {
-        logout();
+      onError: (result) => {
+        // Only logout on explicit auth failures (401). Network errors or
+        // transient server errors should not destroy the user's session —
+        // especially on public pages like the enrollment page where the
+        // user can still interact via cookie-authenticated API calls.
+        const isAuthError =
+          (typeof result === 'string' && result.includes('Authentication failed')) ||
+          (typeof result === 'string' && result.includes('Unauthorized'));
+
+        if (isAuthError) {
+          logout();
+        } else {
+          console.warn('Account fetch failed (non-auth error), not logging out:', result);
+        }
       }
     });
   }

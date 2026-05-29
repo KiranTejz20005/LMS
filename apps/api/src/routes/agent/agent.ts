@@ -624,7 +624,7 @@ const agentCoreRouter = new Hono()
         system: systemContent,
         messages: modelMessages,
         tools: isFreeTierProvider ? undefined : agentTools,
-        maxTokens: 4096,
+        maxOutputTokens: 4096,
         stopWhen: stepCountIs(MAX_STEPS_PER_ROUND),
         onStepFinish: () => {
           completedStepCount += 1;

@@ -22,7 +22,7 @@ function getSiteNameValidation() {
 }
 
 export const getConfirmPasswordError = ({ password, confirmPassword }) => {
-  return password > 6 && confirmPassword > 6 && password !== confirmPassword
+  return password.length >= 8 && confirmPassword.length >= 8 && password !== confirmPassword
     ? `${t.get('validations.confirm_password.not_match')}`
     : undefined;
 };
@@ -61,7 +61,7 @@ export const authValidation = (fields = {}) => {
     email: z.string().email({
       message: 'validations.auth.email.invalid_email'
     }),
-    password: z.string().min(6, {
+    password: z.string().min(8, {
       message: 'validations.auth.password.min_char'
     })
   });

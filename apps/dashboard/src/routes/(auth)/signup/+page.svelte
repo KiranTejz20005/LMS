@@ -133,16 +133,20 @@
           headers,
           onSuccess: (ctx) => {
             console.log('Signup successful');
+
+            const userId = ctx?.data?.user?.id || '';
+            const userEmail = ctx?.data?.user?.email || fields.email;
+
             capturePosthogEvent('user_signed_up', {
-              distinct_id: ctx.data.user.id || '',
-              email: ctx.data.user.email,
+              distinct_id: userId,
+              email: userEmail,
               username: name
             });
 
             if ($globalStore.isOrgSite) {
               capturePosthogEvent('student_signed_up', {
-                distinct_id: ctx.data.user.id || '',
-                email: ctx.data.user.email,
+                distinct_id: userId,
+                email: userEmail,
                 username: name
               });
             }
