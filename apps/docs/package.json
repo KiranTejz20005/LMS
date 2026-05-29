@@ -9,7 +9,7 @@
     "deploy": "pnpm run build && wrangler deploy",
     "cf-typegen": "wrangler types && react-router typegen",
     "types:check": "fumadocs-mdx && wrangler types && react-router typegen && tsc --noEmit",
-    "postinstall": "fumadocs-mdx"
+    "postinstall": "fumadocs-mdx || exit 0"
   },
   "dependencies": {
     "@scalar/core": "^0.3.28",
