@@ -52,8 +52,25 @@
   const session = authClient.useSession();
   const isSessionReady = $derived(!$session.isPending && !$session.isRefetching && $session.data);
 
+  // Use server-side session data immediately if available (avoids waiting for client-side API call)
+  let hasTriggeredSetup = false;
   $effect(() => {
+    if (hasTriggeredSetup) return;
+
+    // Try server-side locals first (instant, no API call needed)
+    if (data?.locals?.user && !appInitApi.isInitializedAndReady && !appInitApi.loading) {
+      hasTriggeredSetup = true;
+      appInitApi.setupApp(data.locals as App.Locals, {
+        isOrgSite: data.isOrgSite,
+        orgSiteName: data.orgSiteName,
+        orgId: data.org?.id ?? null
+      });
+      return;
+    }
+
+    // Fallback to client-side session (for client-side navigations)
     if (isSessionReady && !appInitApi.isInitializedAndReady && !appInitApi.loading) {
+      hasTriggeredSetup = true;
       appInitApi.setupApp($session.data as App.Locals, {
         isOrgSite: data.isOrgSite,
         orgSiteName: data.orgSiteName,

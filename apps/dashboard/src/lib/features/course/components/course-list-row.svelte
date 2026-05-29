@@ -131,14 +131,14 @@
   variant="default"
   size="sm"
   align="start"
-  class="cursor-pointer py-4!"
+  class="cursor-pointer py-4! rounded-lg transition-all duration-200 hover:bg-muted/50 hover:shadow-sm"
   onclick={handleRowClick}
   role="row"
 >
   <div class="grid w-full items-start gap-3" style="grid-template-columns: {gridTemplateColumns}">
     <!-- Banner -->
     <div
-      class="ui:border-border bg-muted relative size-28 shrink-0 overflow-hidden rounded-md border"
+      class="ui:border-border relative size-28 shrink-0 overflow-hidden rounded-lg border bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900"
       aria-hidden="true"
     >
       <Image src={bannerImage} alt="" className="h-full w-full object-cover" />
