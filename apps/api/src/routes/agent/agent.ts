@@ -554,15 +554,22 @@ const agentCoreRouter = new Hono()
       // 1h TTL keeps the prefix warm across tool-execution gaps in long agent
       // runs. Break-even is 3 requests within the hour; well under most plan-
       // execution loops.
+      
+      // Truncate system prompt for free-tier providers with low token limits
+      const isFreeTierProvider = providerConfig.provider === AIProvider.GROQ || providerConfig.provider === AIProvider.NVIDIA;
+      const truncatedSystemPrompt = isFreeTierProvider && systemPrompt.length > 4000
+        ? systemPrompt.slice(0, 4000) + '\n\n[System prompt truncated for model token limits. Focus on the user request.]'
+        : systemPrompt;
+
       const systemContent = isAnthropic
         ? {
             role: 'system' as const,
-            content: systemPrompt,
+            content: truncatedSystemPrompt,
             providerOptions: {
               anthropic: { cacheControl: { type: 'ephemeral', ttl: '1h' } }
             }
           }
-        : systemPrompt;
+        : truncatedSystemPrompt;
 
       // Prepend volatile context as a user-turn message so the stable system +
       // tools prefix stays cacheable even when the teacher navigates to a
@@ -616,7 +623,8 @@ const agentCoreRouter = new Hono()
         maxRetries: 2,
         system: systemContent,
         messages: modelMessages,
-        tools: agentTools,
+        tools: isFreeTierProvider ? undefined : agentTools,
+        maxTokens: 4096,
         stopWhen: stepCountIs(MAX_STEPS_PER_ROUND),
         onStepFinish: () => {
           completedStepCount += 1;

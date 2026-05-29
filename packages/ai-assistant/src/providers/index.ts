@@ -10,8 +10,8 @@ const DEFAULT_MODELS: Record<AIProvider, string> = {
   [AIProvider.ANTHROPIC]: 'claude-sonnet-4-20250514',
   [AIProvider.GOOGLE]: 'gemini-3.1-flash-lite',
   [AIProvider.MOONSHOT]: 'kimi-k2.6',
-  [AIProvider.GROQ]: 'llama-3.1-8b-instant',
-  [AIProvider.NVIDIA]: 'meta/llama-3.1-8b-instruct'
+  [AIProvider.GROQ]: 'gemma2-9b-it',
+  [AIProvider.NVIDIA]: 'nvidia/llama-3.1-nemotron-70b-instruct'
 };
 
 const PROVIDER_API_KEY_ENV: Record<AIProvider, string> = {
@@ -81,12 +81,12 @@ export function getProviderConfigForProvider(provider: AIProvider): AIProviderCo
 
 /**
  * Returns the first provider that has a key configured, in preference order.
- * Groq and NVIDIA are preferred since they're free.
+ * NVIDIA is preferred (default), Groq is secondary.
  */
 export function pickAnyConfiguredProvider(): AIProviderConfig | null {
   const order: AIProvider[] = [
-    AIProvider.GROQ,
     AIProvider.NVIDIA,
+    AIProvider.GROQ,
     AIProvider.GOOGLE,
     AIProvider.OPENAI,
     AIProvider.ANTHROPIC,
@@ -107,8 +107,8 @@ export function pickAnyConfiguredProvider(): AIProviderConfig | null {
  */
 export function getAllConfiguredProviders(): AIProviderConfig[] {
   const order: AIProvider[] = [
-    AIProvider.GROQ,
     AIProvider.NVIDIA,
+    AIProvider.GROQ,
     AIProvider.GOOGLE,
     AIProvider.OPENAI,
     AIProvider.ANTHROPIC,

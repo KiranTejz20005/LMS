@@ -42,8 +42,8 @@ export const AGENT_MODELS: Record<AgentModelId, AgentModelDescriptor> = {
   },
   'nvidia-llama-3.1-70b': {
     provider: 'nvidia',
-    label: 'Llama 3.1 8B (NVIDIA)',
-    backendModelId: 'meta/llama-3.1-8b-instruct',
+    label: 'Llama 3.1 Nemotron (NVIDIA)',
+    backendModelId: 'nvidia/llama-3.1-nemotron-70b-instruct',
     isFree: true,
     costTier: 'low',
     contextWindow: 128_000
@@ -91,4 +91,4 @@ export const UI_PICKER_MODEL_IDS = [
   'claude-sonnet-3-5'
 ] as const satisfies readonly AgentModelId[];
 
-export const DEFAULT_PICKER_MODEL_ID: AgentModelId = 'groq-llama-3.3-70b';
+export const DEFAULT_PICKER_MODEL_ID: AgentModelId = 'nvidia-llama-3.1-70b';
