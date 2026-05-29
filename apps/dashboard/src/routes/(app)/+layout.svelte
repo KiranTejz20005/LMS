@@ -3,9 +3,8 @@
 
   import { UpgradeModal, PageLoadProgress, PageRestricted } from '$features/ui';
   import { CommandPalette, KeyboardShortcutListener } from '$features/search';
-  import { isPublicRoute } from '$lib/utils/functions/routes/isPublicRoute';
   import { currentOrg } from '$lib/utils/store/org';
-  import { authClient } from '$lib/utils/services/auth/client';
+  import { appInitApi } from '$features/app/init.svelte';
 
   interface Props {
     children?: import('svelte').Snippet;
@@ -22,20 +21,24 @@
 
   let path = $derived(page.url.pathname);
 
-  const session = authClient.useSession();
-
+  // Redirect to login if user is not authenticated and not on a public route.
+  // Use appInitApi state instead of creating a second useSession() instance
+  // (which would double the polling/network requests).
   $effect(() => {
-    if ($session.isPending || $session.isRefetching || !!$session.data) {
-      return;
-    }
-
     if (data.skipAuth) return;
+    if (data.locals?.user) return; // Server confirmed session exists
 
-    if (isPublicRoute(path) && (path !== '/' || data.isOrgSite)) {
-      return;
-    }
+    // Wait for appInitApi to finish before deciding
+    if (appInitApi.loading) return;
 
-    if (!$session.data && !path.startsWith('/login')) {
+    // If app init completed successfully, user is authenticated
+    if (appInitApi.isInitializedAndReady) return;
+
+    // Don't redirect from public routes
+    if (path.startsWith('/login') || path.startsWith('/signup') || path.startsWith('/forgot')) return;
+
+    // No session found — redirect to login
+    if (!data.locals?.user && !appInitApi.isInitializedAndReady && !appInitApi.loading) {
       window.location.href = '/login';
     }
   });

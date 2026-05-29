@@ -74,16 +74,13 @@
     const redirectTo = page.url.searchParams.get('redirect') || '/';
 
     try {
-      const { error } = await authClient.signIn.anonymous({
-        fetchOptions: {
-          onSuccess: () => {
-            const redirect = redirectTo;
-            window.location.href = redirect.startsWith('/') ? redirect : `/?redirect=${encodeURIComponent(redirect)}`;
-          }
-        }
-      });
+      const { data, error } = await authClient.signIn.anonymous();
 
       if (error) throw error;
+
+      // Sign-in succeeded — redirect
+      const redirect = redirectTo;
+      window.location.href = redirect.startsWith('/') ? redirect : `/?redirect=${encodeURIComponent(redirect)}`;
     } catch (error) {
       console.error('Guest sign in failed:', error);
     }

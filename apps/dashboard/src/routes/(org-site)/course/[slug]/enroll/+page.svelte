@@ -11,10 +11,14 @@
   import { snackbar } from '$features/ui/snackbar/store';
   import { capturePosthogEvent } from '$lib/utils/services/posthog';
   import { resolve } from '$app/paths';
+  import { appInitApi } from '$features/app/init.svelte';
 
   let { data } = $props();
 
   let loading = $state(false);
+
+  // True when the app initialization is still in progress (profile not yet loaded)
+  const isAppLoading = $derived(!appInitApi.isInitializedAndReady && (appInitApi.loading || !!data.locals?.user));
 
   const inviteStatus = $derived(data.invite?.status ?? 'INVALID');
   const canJoinCourse = $derived(
@@ -68,7 +72,13 @@
     const redirectSearch = data.token ? `?invite_token=${encodeURIComponent(data.token)}` : '';
     const redirectUrl = `${redirectPath}${redirectSearch}`;
 
-    if (!$profile.id || !$profile.email) {
+    // Check if user is authenticated using both client-side profile store
+    // and server-side session data (locals). The profile store may not be
+    // populated yet if appInitApi.setupApp is still in progress.
+    const hasProfile = !!$profile.id && !!$profile.email;
+    const hasServerSession = !!data.locals?.user;
+
+    if (!hasProfile && !hasServerSession) {
       const inviteEmail = data.inviteEmail ?? '';
       const target = data.inviteEmailExists ? '/login' : '/signup';
       const params = new URLSearchParams({ redirect: redirectUrl });
@@ -77,6 +87,22 @@
       goto(resolve(`${target}?${params.toString()}`, {}));
       loading = false;
       return;
+    }
+
+    // If we have a server session but profile hasn't loaded yet, wait for it
+    if (!hasProfile && hasServerSession) {
+      // Wait for appInitApi to finish loading (max 10 seconds)
+      const maxWait = 10000;
+      const start = Date.now();
+      while (!$profile.id && Date.now() - start < maxWait) {
+        await new Promise((r) => setTimeout(r, 200));
+      }
+
+      // If profile still didn't load, try enrolling anyway — the API will
+      // authenticate via cookies regardless of client-side state
+      if (!$profile.id) {
+        console.warn('Profile store not populated after waiting, proceeding with enrollment');
+      }
     }
 
     try {
@@ -143,7 +169,7 @@
   </div>
 
   <div class="my-4 flex w-full items-center justify-center">
-    <Button type="submit" disabled={!canJoinCourse || loading} {loading}>
+    <Button type="submit" disabled={!canJoinCourse || loading || isAppLoading} loading={loading || isAppLoading}>
       {$t('course.navItem.landing_page.enroll_page.join_course')}
     </Button>
   </div>

@@ -53,8 +53,20 @@
   const isSessionReady = $derived(!$session.isPending && !$session.isRefetching && $session.data);
 
   // Use server-side session data immediately if available (avoids waiting for client-side API call)
-  let hasTriggeredSetup = false;
+  let hasTriggeredSetup = $state(false);
   $effect(() => {
+    // Don't attempt app setup on auth routes — no session is expected there
+    const pathname = page.url.pathname;
+    const isAuthRoute =
+      pathname.startsWith('/login') ||
+      pathname.startsWith('/signup') ||
+      pathname.startsWith('/forgot') ||
+      pathname.startsWith('/reset') ||
+      pathname.startsWith('/auth-failed') ||
+      pathname.startsWith('/verify-email-error');
+    if (isAuthRoute) return;
+
+    if (hasTriggeredSetup && appInitApi.isInitializedAndReady) return;
     if (hasTriggeredSetup) return;
 
     // Try server-side locals first (instant, no API call needed)
