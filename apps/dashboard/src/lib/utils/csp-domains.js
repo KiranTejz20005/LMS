@@ -28,6 +28,7 @@ const saasDefaults = {
     'https://google.com',
     'https://apis.google.com',
     'https://accounts.google.com',
+    'https://widget.senja.io',
   ],
   styleSrc: [
     ...commonDomains.styleSrc,

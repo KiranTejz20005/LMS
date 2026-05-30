@@ -75,6 +75,7 @@
   const isLessonUnlocked = $derived(lessonApi.lesson?.isUnlocked ?? false);
   const lessonSlug = $derived(lessonApi.lesson?.slug ?? '');
   const isPublicCourse = $derived(courseApi.course?.type === 'PUBLIC');
+  const isLargeScreen = $derived(browser ? window.innerWidth >= 1024 : false);
 
   function setModeQueryParam(value: (typeof MODES)[keyof typeof MODES]) {
     const params = new SvelteURLSearchParams($page.url.searchParams);
@@ -381,7 +382,7 @@
       {/if}
 
       <RoleBasedSecurity allowedRoles={[1, 2]}>
-        {#if mode === MODES.edit && window.innerWidth >= 1024}
+        {#if mode === MODES.edit && isLargeScreen}
           <IconButton onclick={() => (isVersionDrawerOpen = true)}>
             <HistoryIcon size={20} />
           </IconButton>
@@ -512,7 +513,7 @@
 
 <UnsavedChanges bind:hasUnsavedChanges />
 
-{#if isVersionDrawerOpen && window.innerWidth >= 1024}
+{#if isVersionDrawerOpen && isLargeScreen}
   <LessonVersionHistory
     open={isVersionDrawerOpen}
     on:close={() => (isVersionDrawerOpen = false)}

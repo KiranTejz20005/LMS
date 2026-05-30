@@ -2,6 +2,7 @@
   import * as Select from '@cio/ui/base/select';
   import { Spinner } from '@cio/ui/base/spinner';
 
+  import { browser } from '$app/environment';
   import { currentOrg, isEnterprisePlan } from '$lib/utils/store/org';
   import { ssoStore } from '$features/org/store/sso.svelte';
   import { ssoApi } from '$features/org/api/sso.svelte';
@@ -134,6 +135,7 @@
   }
 
   function getCallbackUrl(providerId: string) {
+    if (!browser) return '';
     return `${window.location.origin}/api/auth/sso/callback/${providerId}`;
   }
 </script>

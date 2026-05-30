@@ -1,3 +1,4 @@
+import { browser } from '$app/environment';
 import { goto } from '$app/navigation';
 import { resolve } from '$app/paths';
 
@@ -15,6 +16,7 @@ export function generateSitename(orgName: string): string {
 }
 
 export function openUpgradeModal() {
+  if (!browser) return;
   const url = new URL(window.location.href);
 
   url.searchParams.set('upgrade', 'true');

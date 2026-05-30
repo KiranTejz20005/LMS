@@ -2,6 +2,7 @@
   import * as Table from '@cio/ui/base/table';
   import { Checkbox } from '@cio/ui/base/checkbox';
   import type { OrganizationAudienceMember } from '$features/org/utils/types';
+  import { browser } from '$app/environment';
   import { t } from '$lib/utils/functions/translations';
   import AudienceMemberRow from './audience-member-row.svelte';
   import { resolve } from '$app/paths';
@@ -45,6 +46,7 @@
 
   function memberHref(row: OrganizationAudienceMember): string | null {
     if (!row.profileId) return null;
+    if (!browser) return null;
     return resolve(`${window.location.pathname}/${row.profileId}`, {});
   }
 </script>

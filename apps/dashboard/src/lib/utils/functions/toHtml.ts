@@ -11,6 +11,7 @@ export const isHtmlValueEmpty = (html: string) => {
 };
 
 export const getTextFromHTML = (html: string): string => {
+  if (!browser) return '';
   const dummyDiv = document.createElement('div');
   dummyDiv.innerHTML = html;
 

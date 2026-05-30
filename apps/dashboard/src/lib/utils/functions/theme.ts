@@ -1,8 +1,10 @@
+import { browser } from '$app/environment';
 import { darken, lighten } from 'color2k';
 
 import { tc } from '$lib/utils/functions/trycatch';
 
 export function setTheme(theme: string = '') {
+  if (!browser) return;
   localStorage.setItem('theme', theme);
 
   if (theme?.includes('#')) {
@@ -20,6 +22,7 @@ const _lighten = (hex: string, no: number) => tc(() => lighten(hex, no), hex);
 const _darken = (hex: string, no: number) => tc(() => darken(hex, no), hex);
 
 export function injectCustomTheme(hex: string) {
+  if (!browser) return;
   // Generate shades using color2k's lighten/darken functions
   // Following the same pattern as predefined themes (e.g., purple)
   const shades = {

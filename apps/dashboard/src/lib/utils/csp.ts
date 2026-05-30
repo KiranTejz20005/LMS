@@ -10,7 +10,7 @@ function parseCspDomains(value: string | undefined): string[] {
 function buildCspExtensions(): Record<string, string[]> {
   const allDomains = parseCspDomains(process.env.ALLOWED_EXTERNAL_DOMAINS);
 
-  const or = (envVar: string) => (allDomains.length ? allDomains : parseCspDomains(process.env[envVar]));
+  const or = (envVar: string) => [...allDomains, ...parseCspDomains(process.env[envVar])];
 
   const scriptSrc = or('CSP_SCRIPT_SRC_DOMAINS');
   const styleSrc = or('CSP_STYLE_SRC_DOMAINS');
