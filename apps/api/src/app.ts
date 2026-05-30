@@ -96,7 +96,7 @@ export const app = new Hono()
     })
   )
   .use('/api/auth/sign-up/*', signupGuard)
-  .on(['POST', 'GET'], '/api/auth/*', async (c) => {
+  .all('/api/auth/*', async (c) => {
     // Behind the Cloudflare Worker proxy the raw Request URL points at the
     // upstream `.onrender.com` host. Better Auth (and the oauth-proxy plugin)
     // need the original tenant/admin host to construct correct OAuth callback

@@ -127,7 +127,9 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
   plugins: [
     admin(),
     anonymous(),
-    dash(),
+    dash({
+      apiKey: process.env.BETTER_AUTH_API_KEY
+    }),
     sso({
       // OIDC providers are registered dynamically per organization
       // via the admin API (auth.api.registerSSOProvider)
