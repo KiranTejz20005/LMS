@@ -55,7 +55,6 @@
   // Use server-side session data immediately if available (avoids waiting for client-side API call)
   let hasTriggeredSetup = $state(false);
   $effect(() => {
-<<<<<<< HEAD
     // Don't attempt app setup on auth routes — no session is expected there
     const pathname = page.url.pathname;
     const isAuthRoute =
@@ -68,15 +67,6 @@
     if (isAuthRoute) return;
 
     if (hasTriggeredSetup && appInitApi.isInitializedAndReady) return;
-=======
-    if (hasTriggeredSetup && appInitApi.isInitializedAndReady) return;
-
-    // If a previous setup attempt failed, allow retry
-    if (hasTriggeredSetup && !appInitApi.isInitializedAndReady && !appInitApi.loading) {
-      hasTriggeredSetup = false;
-    }
-
->>>>>>> bd1e20a9dbcc8c89f321352d7bc623cc6a4b17ac
     if (hasTriggeredSetup) return;
 
     // Try server-side locals first (instant, no API call needed)
