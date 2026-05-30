@@ -214,7 +214,7 @@
     title="Everything you need when training completion is not optional."
     description={'Not a generic LMS with a "compliance" checkbox. Real workflows for the people who have to answer the auditor\u2019s questions.'}
     ctaLabel="Get started"
-    ctaHref="/signup"
+    ctaHref="https://lms-gurukul.vercel.app/"
     {features}
   />
 

@@ -12,6 +12,7 @@
   import { capturePosthogEvent } from '$lib/utils/services/posthog';
   import { resolve } from '$app/paths';
   import { appInitApi } from '$features/app/init.svelte';
+  import { hasBypassSession, getBypassProfile } from '$lib/utils/functions/auth-bypass';
 
   let { data } = $props();
 

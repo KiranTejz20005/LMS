@@ -18,7 +18,7 @@
       Our payment and subscription system is currently being built. All features are available for free during this development phase.
     </p>
     <div class="mt-8 flex gap-3">
-      <Button href="/signup">Get Started Free</Button>
+      <Button href="https://lms-gurukul.vercel.app/">Get Started Free</Button>
       <Button href="/" variant="outline">Back to Home</Button>
     </div>
   </div>

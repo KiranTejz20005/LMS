@@ -100,6 +100,6 @@
   header="Share Your First Course With Your Audience In Minutes"
   subText="In about 4 Clicks you can already start creating courses."
   btnLabel="Get started for free"
-  link="/signup"
+  link="https://lms-gurukul.vercel.app/"
   demo={false}
 />

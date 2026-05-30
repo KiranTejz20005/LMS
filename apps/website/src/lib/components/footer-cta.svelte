@@ -7,7 +7,7 @@
   </p>
   <div class="mb-9 flex flex-wrap justify-center gap-3.5">
     <a
-      href="/signup"
+      href="https://lms-gurukul.vercel.app/"
       class="inline-flex items-center gap-2 rounded-lg bg-gray-950 px-7 py-3.5 text-sm font-semibold text-white no-underline transition-all duration-200 hover:-translate-y-0.5 hover:bg-blue-700 lg:text-base"
     >
       Get Started Free →

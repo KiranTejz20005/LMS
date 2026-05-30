@@ -278,7 +278,7 @@
     title="Everything you need to teach customers your product."
     description={'Not a "content site" bolted onto your help docs. A real LMS with programs, assessments, certificates, AI tutoring, community, and analytics, wrapped in your brand.'}
     ctaLabel="Get started"
-    ctaHref="/signup"
+    ctaHref="https://lms-gurukul.vercel.app/"
     {features}
   />
 

@@ -93,7 +93,7 @@
     </p>
 
     <div class="mt-8 flex flex-wrap items-center justify-center gap-4">
-      <a href="/signup" class="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-blue-600 px-7 text-base font-medium text-white shadow-lg transition-all hover:bg-blue-700 hover:shadow-xl">
+      <a href="https://lms-gurukul.vercel.app/" class="inline-flex h-12 items-center justify-center gap-2 rounded-md bg-blue-600 px-7 text-base font-medium text-white shadow-lg transition-all hover:bg-blue-700 hover:shadow-xl">
         Get Started Free
         <ArrowRightIcon size={18} />
       </a>
