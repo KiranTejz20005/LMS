@@ -48,6 +48,7 @@ const config = {
           'blob:',
           'http://localhost:3002',
           'http://localhost:9000',
+          'https://kv.better-auth.com',
           ...(csp.apiOrigin ? [csp.apiOrigin] : []),
           ...csp.connectSrc
         ],
@@ -73,6 +74,7 @@ const config = {
           'blob:',
           'http://localhost:3002',
           'http://localhost:9000',
+          'https://kv.better-auth.com',
           ...(csp.apiOrigin ? [csp.apiOrigin] : []),
           ...csp.connectSrc
         ],
