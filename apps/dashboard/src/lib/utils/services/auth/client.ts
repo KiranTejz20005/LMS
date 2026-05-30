@@ -24,12 +24,12 @@ function resolveBaseURL() {
   if (typeof window === 'undefined') {
     return env.PUBLIC_SERVER_URL || 'http://localhost:3002';
   }
-  // In production, proxy through the dashboard's own domain to keep cookies same-origin
   // In dev, hit the API directly (same localhost, different port)
   if (dev) {
     return env.PUBLIC_SERVER_URL || 'http://localhost:3081';
   }
-  // Production: use same-origin proxy at /api/auth
+  // Production: always use same-origin proxy at /api/auth
+  // This keeps auth cookies on the dashboard's domain
   return `${window.location.origin}/api/auth`;
 }
 

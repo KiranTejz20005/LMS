@@ -25,24 +25,13 @@ export const getRequestBaseUrl = () => {
     return url ?? '';
   }
 
-  // Self-hosted / local dev: browser calls API directly (different port,
-  // same localhost, or different subdomain under a single apex).
-  if (env.PUBLIC_IS_SELFHOSTED === 'true' || dev) {
+  // In dev, hit the API directly (same localhost, different port)
+  if (dev) {
     return env.PUBLIC_SERVER_URL ?? '';
   }
 
-  // Vercel + Render deployment (no Cloudflare Worker):
-  // On Vercel (VERCEL=1) the SvelteKit server handles /proxy rewrites to
-  // forward requests to the API. The browser calls same-origin so cookies
-  // and CSP work without cross-origin headaches.
-  if (typeof process !== 'undefined' && process.env.VERCEL === '1') {
-    return `${window.location.origin}/proxy`;
-  }
-
-  // Cloud (multi-tenant) with Cloudflare Worker: same-origin via `/proxy`
-  // prefix so auth cookies stay host-only on whichever tenant or BYOD
-  // domain the user is currently visiting. The Worker strips `/proxy`
-  // before forwarding to the API.
+  // Production (Vercel/Render/Cloudflare): always use same-origin proxy
+  // so cookies stay on the dashboard domain and avoid cross-origin issues.
   return `${window.location.origin}/proxy`;
 };
 
