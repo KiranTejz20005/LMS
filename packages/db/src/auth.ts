@@ -7,6 +7,7 @@ import { sendChangeEmailConfirmation, sendVerificationEmail } from './auth/email
 import { betterAuth } from 'better-auth/minimal';
 import { createProfileHook } from './auth/hooks/create-profile';
 import { customSession } from 'better-auth/plugins/custom-session';
+import { dash } from '@better-auth/infra';
 import { db } from '@db/drizzle';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
 import { config as emailAndPassword } from './auth/email-password';
@@ -126,6 +127,7 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
   plugins: [
     admin(),
     anonymous(),
+    dash(),
     sso({
       // OIDC providers are registered dynamically per organization
       // via the admin API (auth.api.registerSSOProvider)

@@ -1,6 +1,7 @@
 import { createAuthClient } from 'better-auth/svelte';
 import { env } from '$env/dynamic/public';
 import { ssoClient } from '@better-auth/sso/client';
+import { sentinelClient } from '@better-auth/infra/client';
 import { dev } from '$app/environment';
 
 // Browser baseURL depends on deployment shape:
@@ -44,6 +45,7 @@ export const authClient = createAuthClient({
       domainVerification: {
         enabled: true
       }
-    })
+    }),
+    sentinelClient()
   ]
 });

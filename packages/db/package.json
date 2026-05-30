@@ -74,6 +74,7 @@
     "db:disable-v1-content-grouping-from-dump": "tsx src/scripts/disable-v1-content-grouping-from-dump.ts"
   },
   "dependencies": {
+    "@better-auth/infra": "^0.2.11",
     "@better-auth/sso": "^1.4.18",
     "@cio/email": "workspace:*",
     "@cio/question-types": "workspace:*",
