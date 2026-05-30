@@ -89,4 +89,3 @@ export function getCspDomains(isSelfHosted, serverUrl) {
   }
   return { ...saasDefaults, apiOrigin: serverUrl ?? null };
 }
-}
