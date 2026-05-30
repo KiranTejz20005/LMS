@@ -87,7 +87,7 @@ const handlePagesRoutes: Handle = async ({ event, resolve }) => {
       ? `${ROUTE.LOGIN}?redirect=${encodeURIComponent(fullPath)}`
       : ROUTE.LOGIN;
 
-    return redirect(303, redirectPath);
+    throw redirect(303, redirectPath);
   }
 
   return resolve(event);
@@ -101,7 +101,7 @@ const handleAPIRoutes: Handle = async ({ event, resolve }) => {
   }
 
   if (!event.locals.user) {
-    redirect(303, '/login');
+    throw redirect(303, '/login');
   }
 
   return resolve(event);
