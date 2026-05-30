@@ -13,7 +13,6 @@ import { identifyPosthogUser } from '$lib/utils/services/posthog';
 import { isOrgStudent } from '$lib/utils/store/app';
 import { isPublicRoute } from '$lib/utils/functions/routes/isPublicRoute';
 import { licenseApi } from '$features/license/api/license.svelte';
-import { logout } from '$lib/utils/functions/logout';
 import { page } from '$app/state';
 import { resolve } from '$app/paths';
 import { setSentryUser } from '$lib/utils/services/sentry';
@@ -83,7 +82,8 @@ class AppInitApi extends BaseApi {
           (typeof result === 'string' && result.includes('Unauthorized'));
 
         if (isAuthError) {
-          logout();
+          // Lazy import to avoid circular dependency between init.svelte.ts and logout.ts
+          import('$lib/utils/functions/logout').then(({ logout }) => logout());
         } else {
           console.warn('Account fetch failed (non-auth error), not logging out:', result);
         }
