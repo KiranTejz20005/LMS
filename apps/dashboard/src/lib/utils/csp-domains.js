@@ -37,7 +37,8 @@ const saasDefaults = {
     'https://*.senja.io',
     'https://*.ytimg.com',
     'https://noembed.com',
-    'https://www.googleapis.com'
+    'https://www.googleapis.com',
+    'https://kv.better-auth.com'
   ],
   frameSrc: [
     'https://www.youtube.com',
