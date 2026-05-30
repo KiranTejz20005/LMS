@@ -19,10 +19,8 @@
   let loading = $state(false);
 
   // True when the app initialization is still in progress (profile not yet loaded)
-  // For bypass users, never show app loading since appInitApi won't complete
-  const isAppLoading = $derived(
-    !hasBypassSession() && !appInitApi.isInitializedAndReady && (appInitApi.loading || !!data.locals?.user)
-  );
+  // Once appInitApi stops loading (success or failure), we're done waiting
+  const isAppLoading = $derived(appInitApi.loading);
 
   const inviteStatus = $derived(data.invite?.status ?? 'INVALID');
   const canJoinCourse = $derived(
@@ -76,20 +74,13 @@
     const redirectSearch = data.token ? `?invite_token=${encodeURIComponent(data.token)}` : '';
     const redirectUrl = `${redirectPath}${redirectSearch}`;
 
-    // Check if user is authenticated using both client-side profile store
-    // and server-side session data (locals). The profile store may not be
-    // populated yet if appInitApi.setupApp is still in progress.
+    // Check if user is authenticated
     const hasProfile = !!$profile.id && !!$profile.email;
     const hasServerSession = !!data.locals?.user;
 
+    // No auth at all — skip signup redirect loop, just go to LMS
     if (!hasProfile && !hasServerSession) {
-      const inviteEmail = data.inviteEmail ?? '';
-      const target = data.inviteEmailExists ? '/login' : '/signup';
-      const params = new URLSearchParams({ redirect: redirectUrl });
-      if (inviteEmail) params.set('email', inviteEmail);
-
-      goto(resolve(`${target}?${params.toString()}`, {}));
-      loading = false;
+      window.location.href = '/lms';
       return;
     }
 
