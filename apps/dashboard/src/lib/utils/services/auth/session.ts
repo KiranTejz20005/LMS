@@ -3,6 +3,8 @@ import { getAuthServerClient } from './server';
 import { gurukulx } from '$lib/utils/services/api';
 import { getCioCookieString } from '$lib/utils/functions/cookies';
 import { getRequestBaseUrl } from '$lib/utils/services/api';
+import { env as publicEnv } from '$env/dynamic/public';
+import { env as privateEnv } from '$env/dynamic/private';
 
 export const getSessionData = async (cookies: Cookies): Promise<App.Locals | null> => {
   try {
@@ -17,7 +19,6 @@ export const getSessionData = async (cookies: Cookies): Promise<App.Locals | nul
     console.log('[session] has locals:', !!locals);
     if (!locals) return null;
 
-    // This will always be true because if we don't have gurukulx cookies, we won't be able to this line of code.
     locals.fromSessions = true;
 
     return locals;
@@ -39,19 +40,28 @@ export async function getThroughTrpc(allCookies: string) {
   return data;
 }
 
+/**
+ * Resolve the API URL for server-side Better Auth session checking.
+ * Tries PRIVATE_SERVER_URL first (for internal/private networking),
+ * then PUBLIC_SERVER_URL. Session lookup failures are non-fatal — the
+ * client-side hook will check via the same-origin proxy.
+ */
+function resolveServerSessionUrl(): string {
+  return privateEnv.PRIVATE_SERVER_URL || publicEnv.PUBLIC_SERVER_URL || '';
+}
+
 export async function getThroughAuthClient(allCookies: string) {
-  const baseURL = getRequestBaseUrl();
+  const baseURL = resolveServerSessionUrl();
   console.log('[session] baseURL for auth client:', baseURL);
 
   if (!baseURL) {
     console.error(
-      '[session] CRITICAL: baseURL is empty! Set PUBLIC_SERVER_URL (or PRIVATE_SERVER_URL for SSR) in Render environment variables to point at https://lms-haya.onrender.com'
+      '[session] CRITICAL: baseURL is empty! Set PUBLIC_SERVER_URL (or PRIVATE_SERVER_URL for SSR) in environment variables.'
     );
     return null;
   }
 
   try {
-    // Use factory to ensure we always get a client with the live baseURL
     const client = getAuthServerClient();
     const session = await client.getSession({
       fetchOptions: {

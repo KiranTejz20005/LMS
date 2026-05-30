@@ -5,6 +5,7 @@
   import { CommandPalette, KeyboardShortcutListener } from '$features/search';
   import { currentOrg } from '$lib/utils/store/org';
   import { appInitApi } from '$features/app/init.svelte';
+  import { authClient } from '$lib/utils/services/auth/client';
 
   interface Props {
     children?: import('svelte').Snippet;
@@ -21,12 +22,17 @@
 
   let path = $derived(page.url.pathname);
 
+  // Client-side session — used when server-side check failed but auth
+  // cookies are present (see hooks.server.ts `authCookiesPresent`).
+  const clientSession = authClient.useSession();
+  const isClientSessionReady = $derived(!$clientSession.isPending);
+
   // Redirect to login if user is not authenticated and not on a public route.
-  // Use appInitApi state instead of creating a second useSession() instance
-  // (which would double the polling/network requests).
   $effect(() => {
     if (data.skipAuth) return;
-    if (data.locals?.user) return; // Server confirmed session exists
+
+    // Server confirmed session exists
+    if (data.locals?.user) return;
 
     // Wait for appInitApi to finish before deciding
     if (appInitApi.loading) return;
@@ -36,6 +42,15 @@
 
     // Don't redirect from public routes
     if (path.startsWith('/login') || path.startsWith('/signup') || path.startsWith('/forgot')) return;
+
+    // Auth cookies are present but server-side check failed.
+    // Wait for the client-side proxy session check to complete.
+    if (data.locals?.authCookiesPresent) {
+      if (!isClientSessionReady) return; // still waiting for client check
+      // Client check finished and found a session -> the root layout's
+      // effect will trigger appInitApi.setupApp.
+      if ($clientSession.data) return;
+    }
 
     // No session found — redirect to login
     if (!data.locals?.user && !appInitApi.isInitializedAndReady && !appInitApi.loading) {

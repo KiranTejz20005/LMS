@@ -45,6 +45,14 @@ export const handle: Handle = async (args) => {
     const sessionData = await getSessionData(event.cookies);
     if (sessionData) {
       event.locals = sessionData;
+    } else {
+      // Even if the server-side session verification failed, check if auth
+      // cookies exist. If so, mark locals so the client doesn't immediately
+      // redirect to login — the client-side proxy will verify instead.
+      const hasCioCookie = getHasCioCookies(event.cookies);
+      if (hasCioCookie) {
+        event.locals = { user: null, session: null, profile: null, organizations: [], authCookiesPresent: true };
+      }
     }
   }
 

@@ -2,10 +2,24 @@
 // Self-hosted (adapter-node) starts with empty lists; runtime domains
 // are added via env vars in hooks.server.ts so pre-built Docker images stay configurable.
 
+/**
+ * Common external domains the app loads regardless of deployment mode.
+ * These are always included so self-hosted Vercel deployments (which
+ * still load Google Fonts, PostHog, etc.) don't get CSP-blocked.
+ */
+const commonDomains = {
+  scriptSrc: ['https://cdnjs.cloudflare.com'],
+  styleSrc: ['https://fonts.googleapis.com'],
+  fontSrc: ['https://fonts.gstatic.com'],
+  connectSrc: [],
+  frameSrc: [],
+  mediaSrc: [],
+};
+
 const saasDefaults = {
   scriptSrc: [
+    ...commonDomains.scriptSrc,
     'https://assets.cdn.clsrio.com',
-    'https://cdnjs.cloudflare.com',
     'https://*.posthog.com',
     'https://*.senja.io',
     'https://umami.hz.oncws.com',
@@ -13,13 +27,13 @@ const saasDefaults = {
     'https://youtube.com',
     'https://google.com',
     'https://apis.google.com',
-    'https://accounts.google.com'
+    'https://accounts.google.com',
   ],
   styleSrc: [
+    ...commonDomains.styleSrc,
     'https://cdn.plyr.io',
     'https://unpkg.com/katex@0.12.0/dist/katex.min.css',
     'https://assets.cdn.clsrio.com/eqneditor_1.css',
-    'https://fonts.googleapis.com'
   ],
   connectSrc: [
     'https://*.gurukulx.com',
@@ -38,7 +52,7 @@ const saasDefaults = {
     'https://*.ytimg.com',
     'https://noembed.com',
     'https://www.googleapis.com',
-    'https://kv.better-auth.com'
+    'https://kv.better-auth.com',
   ],
   frameSrc: [
     'https://www.youtube.com',
@@ -47,31 +61,32 @@ const saasDefaults = {
     'https://www.google.com',
     'https://google.com',
     'https://drive.google.com',
-    'https://docs.google.com'
+    'https://docs.google.com',
   ],
-  fontSrc: ['https://fonts.gstatic.com', 'https://cdn.plyr.io'],
-  mediaSrc: ['https:']
+  fontSrc: [
+    ...commonDomains.fontSrc,
+    'https://cdn.plyr.io',
+  ],
+  mediaSrc: ['https:'],
 };
 
-/**
- * @param {boolean} isSelfHosted
- * @param {string | undefined} serverUrl - PUBLIC_SERVER_URL, added to connect-src for SaaS builds
- */
+const selfHostedDefaults = {
+  scriptSrc: [...commonDomains.scriptSrc],
+  styleSrc: [...commonDomains.styleSrc],
+  connectSrc: [],
+  frameSrc: [],
+  fontSrc: [...commonDomains.fontSrc],
+  mediaSrc: [],
+};
+
 export function getCspDomains(isSelfHosted, serverUrl) {
   if (isSelfHosted) {
     return {
-      scriptSrc: [],
-      styleSrc: [],
-      connectSrc: [],
-      frameSrc: [],
-      fontSrc: [],
-      mediaSrc: [],
-      apiOrigin: null
+      ...selfHostedDefaults,
+      apiOrigin: serverUrl ?? null,
+      connectSrc: serverUrl ? [serverUrl] : [],
     };
   }
-
-  return {
-    ...saasDefaults,
-    apiOrigin: serverUrl ?? null
-  };
+  return { ...saasDefaults, apiOrigin: serverUrl ?? null };
+}
 }

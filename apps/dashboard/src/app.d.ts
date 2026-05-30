@@ -16,7 +16,14 @@ declare global {
       profile: TProfile | null;
       organizations: AccountOrganization[];
       fromSessions?: boolean;
-      // getAccount: () =>
+      /**
+       * Set by hooks.server.ts when auth cookies are present in the request
+       * but the server-side Better Auth session check failed (e.g., env var
+       * misconfiguration or transient API error). The client-side layout
+       * should wait for the same-origin proxy session check before deciding
+       * whether to redirect to login.
+       */
+      authCookiesPresent?: boolean;
     }
     // interface PageData {}
     // interface Error {}

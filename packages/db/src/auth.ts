@@ -36,8 +36,21 @@ function buildOAuthProxyPlugin() {
   return [oAuthProxy({ productionURL: CONSTANTS.BASE_URL })];
 }
 
+/**
+ * The URL Better Auth uses to generate OAuth / magic-link / email-verification
+ * callbacks.  In a Vercel+Render deployment the browser talks to the dashboard
+ * proxy (`app-gurukulx.vercel.app/api/auth/*`), so callbacks must point there
+ * to keep session cookies on the same origin.
+ *
+ * When AUTH_PROXY_URL is set (e.g. `https://app-gurukulx.vercel.app`) it takes
+ * precedence over the raw PUBLIC_SERVER_URL so OAuth flows work through the proxy.
+ */
+function resolveAuthBaseUrl(): string {
+  return process.env.AUTH_PROXY_URL || CONSTANTS.BASE_URL;
+}
+
 export const auth: ReturnType<typeof betterAuth> = betterAuth({
-  baseURL: CONSTANTS.BASE_URL,
+  baseURL: resolveAuthBaseUrl(),
   database: drizzleAdapter(db, {
     provider: 'pg',
     schema

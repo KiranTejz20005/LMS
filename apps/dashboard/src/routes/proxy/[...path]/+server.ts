@@ -2,33 +2,28 @@ import { env as publicEnv } from '$env/dynamic/public';
 import { env as privateEnv } from '$env/dynamic/private';
 import type { RequestHandler } from './$types';
 
-/**
- * Build the target API URL, preferring the server-side private variable
- * so Render/Vercel deployments can set PRIVATE_SERVER_URL for the
- * server-to-server call while PUBLIC_SERVER_URL stays browser-visible.
- */
 function getServerApiUrl(): string {
   return privateEnv.PRIVATE_SERVER_URL || publicEnv.PUBLIC_SERVER_URL || 'http://localhost:3081';
 }
 
 /**
- * Proxy all /api/auth/* requests to the backend API.
- * This keeps auth cookies on the same domain as the dashboard,
- * solving cross-origin cookie issues in production.
+ * Proxy all /proxy/* requests to the backend API.
+ * This is used by the Hono RPC client to keep all API calls
+ * same-origin in Vercel+Render deployments.
  */
 export const fallback: RequestHandler = async ({ request, params, url }) => {
   const path = params.path;
   const API_URL = getServerApiUrl();
 
   if (!API_URL) {
-    console.error('[auth-proxy] CRITICAL: No API_URL configured');
+    console.error('[api-proxy] CRITICAL: No API_URL configured');
     return new Response(JSON.stringify({ error: 'Server configuration error' }), {
       status: 500,
       headers: { 'content-type': 'application/json' }
     });
   }
 
-  const targetUrl = `${API_URL}/api/auth/${path}${url.search}`;
+  const targetUrl = `${API_URL}/${path}${url.search}`;
 
   const headers = new Headers(request.headers);
   headers.delete('host');
@@ -44,9 +39,6 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
 
   const responseHeaders = new Headers(response.headers);
 
-  // Strip Domain from Set-Cookie so cookies are stored for the browser's
-  // own origin (app-gurukulx.vercel.app) rather than the API host.
-  // Also ensure SameSite=None for cross-origin proxy scenarios.
   const setCookieHeaders = responseHeaders.getSetCookie();
   if (setCookieHeaders.length > 0) {
     responseHeaders.delete('set-cookie');
@@ -62,7 +54,6 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
     }
   }
 
-  // Remove transfer-encoding as we're not streaming
   responseHeaders.delete('transfer-encoding');
   responseHeaders.delete('content-encoding');
 
