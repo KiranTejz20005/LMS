@@ -18,7 +18,10 @@
   let loading = $state(false);
 
   // True when the app initialization is still in progress (profile not yet loaded)
-  const isAppLoading = $derived(!appInitApi.isInitializedAndReady && (appInitApi.loading || !!data.locals?.user));
+  // For bypass users, never show app loading since appInitApi won't complete
+  const isAppLoading = $derived(
+    !hasBypassSession() && !appInitApi.isInitializedAndReady && (appInitApi.loading || !!data.locals?.user)
+  );
 
   const inviteStatus = $derived(data.invite?.status ?? 'INVALID');
   const canJoinCourse = $derived(

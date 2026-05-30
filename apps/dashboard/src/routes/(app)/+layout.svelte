@@ -1,11 +1,13 @@
 <script lang="ts">
   import { page } from '$app/state';
+  import { onMount } from 'svelte';
 
   import { UpgradeModal, PageLoadProgress, PageRestricted } from '$features/ui';
   import { CommandPalette, KeyboardShortcutListener } from '$features/search';
-  import { currentOrg } from '$lib/utils/store/org';
+  import { currentOrg, orgs } from '$lib/utils/store/org';
   import { appInitApi } from '$features/app/init.svelte';
-  import { authClient } from '$lib/utils/services/auth/client';
+  import { hasBypassSession, getBypassProfile, getBypassOrg } from '$lib/utils/functions/auth-bypass';
+  import { user, profile } from '$lib/utils/store/user';
 
   interface Props {
     children?: import('svelte').Snippet;
@@ -22,40 +24,26 @@
 
   let path = $derived(page.url.pathname);
 
-  // Client-side session — used when server-side check failed but auth
-  // cookies are present (see hooks.server.ts `authCookiesPresent`).
-  const clientSession = authClient.useSession();
-  const isClientSessionReady = $derived(!$clientSession.isPending);
+  // Hydrate stores from bypass data immediately so sidebar renders content
+  if (typeof window !== 'undefined' && hasBypassSession() && !data.locals?.user) {
+    const bypassProfile = getBypassProfile();
+    const bypassOrg = getBypassOrg();
 
-  // Redirect to login if user is not authenticated and not on a public route.
+    user.update((_user) => ({
+      ..._user,
+      fetchingUser: false,
+      isLoggedIn: true,
+      currentSession: { id: 'bypass-user-001', email: bypassProfile.email, name: bypassProfile.fullname } as any
+    }));
+
+    profile.set(bypassProfile as any);
+    orgs.set([bypassOrg as any]);
+    currentOrg.set(bypassOrg as any);
+  }
+
+  // Auth bypass: skip all auth redirect checks
   $effect(() => {
-    if (data.skipAuth) return;
-
-    // Server confirmed session exists
-    if (data.locals?.user) return;
-
-    // Wait for appInitApi to finish before deciding
-    if (appInitApi.loading) return;
-
-    // If app init completed successfully, user is authenticated
-    if (appInitApi.isInitializedAndReady) return;
-
-    // Don't redirect from public routes
-    if (path.startsWith('/login') || path.startsWith('/signup') || path.startsWith('/forgot')) return;
-
-    // Auth cookies are present but server-side check failed.
-    // Wait for the client-side proxy session check to complete.
-    if (data.locals?.authCookiesPresent) {
-      if (!isClientSessionReady) return; // still waiting for client check
-      // Client check finished and found a session -> the root layout's
-      // effect will trigger appInitApi.setupApp.
-      if ($clientSession.data) return;
-    }
-
-    // No session found — redirect to login
-    if (!data.locals?.user && !appInitApi.isInitializedAndReady && !appInitApi.loading) {
-      window.location.href = '/login';
-    }
+    return;
   });
 </script>
 

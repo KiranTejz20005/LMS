@@ -10,6 +10,10 @@ function getServerApiUrl(): string {
  * Proxy all /proxy/* requests to the backend API.
  * This is used by the Hono RPC client to keep all API calls
  * same-origin in Vercel+Render deployments.
+ *
+ * We read the full response body (which auto-decompresses gzip/br)
+ * and forward the raw bytes. This avoids the mismatch where we strip
+ * content-encoding but pass through a still-compressed body.
  */
 export const fallback: RequestHandler = async ({ request, params, url }) => {
   const path = params.path;
@@ -27,6 +31,8 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
 
   const headers = new Headers(request.headers);
   headers.delete('host');
+  // Don't request compressed responses — we'll forward uncompressed
+  headers.delete('accept-encoding');
   headers.set('x-forwarded-host', url.host);
   headers.set('x-forwarded-proto', url.protocol.replace(':', ''));
 
@@ -37,8 +43,12 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
     redirect: 'manual'
   });
 
+  // Read the full body (auto-decompresses if content-encoding was applied)
+  const body = await response.arrayBuffer();
+
   const responseHeaders = new Headers(response.headers);
 
+  // Rewrite Set-Cookie headers to remove Domain (make them same-origin)
   const setCookieHeaders = responseHeaders.getSetCookie();
   if (setCookieHeaders.length > 0) {
     responseHeaders.delete('set-cookie');
@@ -54,10 +64,13 @@ export const fallback: RequestHandler = async ({ request, params, url }) => {
     }
   }
 
+  // Remove hop-by-hop and encoding headers since we've decompressed
   responseHeaders.delete('transfer-encoding');
   responseHeaders.delete('content-encoding');
+  // Set correct content-length for the decompressed body
+  responseHeaders.set('content-length', String(body.byteLength));
 
-  return new Response(response.body, {
+  return new Response(body, {
     status: response.status,
     statusText: response.statusText,
     headers: responseHeaders
