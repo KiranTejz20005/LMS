@@ -10,6 +10,11 @@ import { preloadVerifiedCustomDomainOriginsRegistry } from '@api/utils/origins';
 import { serve } from '@hono/node-server';
 import { showRoutes } from 'hono/dev';
 
+// Catch unhandled rejections so they log instead of silently crashing
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled promise rejection:', reason);
+});
+
 // Start server
 async function startServer() {
   console.log('Starting server on port:', API_PORT);
@@ -17,9 +22,16 @@ async function startServer() {
   // Connect to Redis (non-blocking: API starts even if Redis fails)
   await connectRedis();
 
-  preloadVerifiedCustomDomainOriginsRegistry().then(() => {
-    console.log('Verified custom domain origins preloaded');
-  });
+  preloadVerifiedCustomDomainOriginsRegistry()
+    .then(() => {
+      console.log('Verified custom domain origins preloaded');
+    })
+    .catch((error) => {
+      console.error('Failed to preload custom domain origins (non-fatal):', error);
+      // Non-fatal: the server can still operate without the custom domain
+      // registry — it will just reject requests from unrecognized custom
+      // domains until the next successful preload or manual refresh.
+    });
 
   serve({ fetch: app.fetch, port: API_PORT });
 
